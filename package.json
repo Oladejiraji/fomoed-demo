@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.90.21",
+    "axios": "^1.13.6",
     "liveline": "^0.0.7",
     "next": "16.1.7",
     "react": "19.2.3",
