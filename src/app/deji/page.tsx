@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Slider } from "@/components/slider";
 import Tabs from "@/components/tabs";
 import Swap from "@/components/swap";
+import { Chart } from "@/components/chart";
 
 const tabData = [
   {
@@ -27,7 +28,10 @@ export default function Deji() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center ">
       <div className="w-full max-w-78">
-        <div className="mb-12">
+        <div>
+          <Chart />
+        </div>
+        <div className="my-12">
           <Tabs
             tabs={tabData}
             activeTab={activeTab}
