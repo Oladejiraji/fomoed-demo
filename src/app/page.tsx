@@ -8,7 +8,7 @@ type DataPoint = { time: number; value: number };
 function generateInitialData(
   count: number,
   basePrice: number,
-  volatility: number
+  volatility: number,
 ): DataPoint[] {
   const now = Math.floor(Date.now() / 1000);
   const points: DataPoint[] = [];
@@ -22,13 +22,13 @@ function generateInitialData(
 
 export default function Home() {
   const [btcData, setBtcData] = useState<DataPoint[]>(() =>
-    generateInitialData(60, 67420, 15)
+    generateInitialData(60, 67420, 15),
   );
   const [ethData, setEthData] = useState<DataPoint[]>(() =>
-    generateInitialData(60, 3580, 5)
+    generateInitialData(60, 3580, 5),
   );
   const [solData, setSolData] = useState<DataPoint[]>(() =>
-    generateInitialData(60, 172, 1.2)
+    generateInitialData(60, 172, 1.2),
   );
 
   const btcValue = btcData[btcData.length - 1]?.value ?? 0;
@@ -38,10 +38,7 @@ export default function Home() {
   const tick = useCallback(() => {
     const now = Math.floor(Date.now() / 1000);
 
-    const addPoint = (
-      prev: DataPoint[],
-      volatility: number
-    ): DataPoint[] => {
+    const addPoint = (prev: DataPoint[], volatility: number): DataPoint[] => {
       const last = prev[prev.length - 1];
       const delta = (Math.random() - 0.49) * volatility;
       const next = { time: now, value: last.value + delta };
@@ -61,9 +58,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
       <header className="px-6 py-8 max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Liveline Demo
-        </h1>
+        <h1 className="text-3xl font-bold tracking-tight">Liveline Demo</h1>
         <p className="text-zinc-400 mt-1">
           Real-time animated charts — powered by{" "}
           <a
@@ -140,7 +135,7 @@ export default function Home() {
               value={solValue}
               color="#9945ff"
               theme="dark"
-              showValue
+              showValue={false}
               valueMomentumColor
               momentum
               scrub
@@ -148,7 +143,10 @@ export default function Home() {
               windows={[
                 { label: "1m", secs: 60 },
                 { label: "2m", secs: 120 },
+                { label: "5m", secs: 300 },
               ]}
+              grid={false}
+              badge={false}
             />
           </div>
         </div>
