@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Deposit } from "../deposit/deposit";
 import { TokenList } from "../deposit/token-list";
 import { NetworkList } from "../deposit/network-list";
+import { Confirm } from "../deposit/confirm";
 
 interface IProps {
   showDepositModal: boolean;
@@ -83,6 +84,22 @@ export function DepositFlow(props: IProps) {
           </motion.div>
         </div>
       )}
+      <div
+        key="network-list"
+        className="absolute inset-0 z-12 flex items-end"
+        onClick={() => setShowNetworks(false)}
+      >
+        <motion.div
+          className="w-full"
+          onClick={(e) => e.stopPropagation()}
+          initial={{ y: "100%", filter: "blur(4px)" }}
+          animate={{ y: 0, filter: "blur(0px)" }}
+          exit={{ y: "100%", filter: "blur(4px)" }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        >
+          <Confirm />
+        </motion.div>
+      </div>
     </AnimatePresence>
   );
 }

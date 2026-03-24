@@ -138,7 +138,12 @@ export function Copy() {
   );
 }
 
-export function CheckIcon({ fill }: { fill?: string } = { fill: "#CCFF00" }) {
+interface CheckIconProps {
+  fill?: string;
+}
+export function CheckIcon(props: CheckIconProps) {
+  const { fill = "#CCFF00" } = props;
+
   return (
     <svg
       width="14"
