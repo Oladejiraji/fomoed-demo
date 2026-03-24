@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   AreaChart,
   Area,
@@ -9,7 +9,7 @@ import {
 } from "recharts";
 import { FXIcon, Indicator, SearchIcon } from "@/icons";
 import { cn } from "@/lib/utils";
-import { motion, useSpring } from "motion/react";
+import { animate, motion, useSpring } from "motion/react";
 
 // RNDR base price ~$4.20 (approximate current price)
 const BASE_PRICE = 4.2;
@@ -27,13 +27,15 @@ interface DataPoint {
   price: number;
 }
 
+const POINT_COUNT = 30;
+
 function generateInitialData(exchange: string): DataPoint[] {
   const config = exchangeConfig[exchange] || { offset: 0, volatility: 0.012 };
   const points: DataPoint[] = [];
   let price = BASE_PRICE + config.offset;
   const now = Date.now();
 
-  for (let i = 29; i >= 0; i--) {
+  for (let i = POINT_COUNT - 1; i >= 0; i--) {
     const change = (Math.random() - 0.48) * config.volatility * price;
     price = Math.max(price + change, BASE_PRICE * 0.85);
     const t = new Date(now - i * 2000);
@@ -53,9 +55,7 @@ function generateInitialData(exchange: string): DataPoint[] {
 function generateNextPrice(lastPrice: number, exchange: string): number {
   const config = exchangeConfig[exchange] || { offset: 0, volatility: 0.012 };
   const change = (Math.random() - 0.48) * config.volatility * lastPrice;
-  return parseFloat(
-    Math.max(lastPrice + change, BASE_PRICE * 0.85).toFixed(4)
-  );
+  return parseFloat(Math.max(lastPrice + change, BASE_PRICE * 0.85).toFixed(4));
 }
 
 const durationOptions = [
@@ -85,7 +85,7 @@ function DurationSection() {
             type="button"
             className={cn(
               "font-medium text-xs leading-5 tracking-[-0.0056em] text-[#F9F9F980] py-0.5 px-2.5 rounded-md cursor-pointer",
-              isActive && activeClassName
+              isActive && activeClassName,
             )}
             onClick={() => {
               setSelectedDuration(item?.value);
@@ -99,14 +99,7 @@ function DurationSection() {
   );
 }
 
-// Animated area chart dot using motion springs
-function AnimatedPrice({
-  value,
-  className,
-}: {
-  value: number;
-  className?: string;
-}) {
+function AnimatedPrice({ value }: { value: number }) {
   const spring = useSpring(value, { stiffness: 120, damping: 20 });
   const [display, setDisplay] = useState(value);
 
@@ -121,77 +114,79 @@ function AnimatedPrice({
     return unsubscribe;
   }, [spring]);
 
-  return <span className={className}>${display.toLocaleString()}</span>;
+  return <span>${display.toLocaleString()}</span>;
 }
 
-// Custom animated area that morphs between datasets
-function AnimatedAreaChart({ data }: { data: DataPoint[] }) {
-  return (
-    <motion.div
-      className="w-full h-full"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart
-          data={data}
-          margin={{ top: 60, right: 0, left: 0, bottom: 0 }}
-        >
-          <defs>
-            <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#6DCB72" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="#6DCB72" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <XAxis dataKey="time" hide />
-          <YAxis domain={["auto", "auto"]} hide />
-          <Tooltip
-            contentStyle={{
-              background: "#1a1a1a",
-              border: "1px solid #333",
-              borderRadius: "8px",
-              color: "#f9f9f9",
-              fontSize: "12px",
-            }}
-            labelStyle={{ color: "#999" }}
-            formatter={(value: number) => [`$${value.toFixed(4)}`, "RNDR"]}
-          />
-          <Area
-            type="monotone"
-            dataKey="price"
-            stroke="#6DCB72"
-            strokeWidth={1.5}
-            fill="url(#priceGradient)"
-            isAnimationActive={true}
-            animationDuration={600}
-            animationEasing="ease-in-out"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-    </motion.div>
-  );
-}
-
-interface PricechartProps {
+interface PricechartMorphProps {
   exchange?: string;
 }
 
-export function Pricechart({ exchange = "Robinhood" }: PricechartProps) {
-  return <PricechartInner key={exchange} exchange={exchange} />;
-}
-
-function PricechartInner({ exchange }: { exchange: string }) {
+export function PricechartMorph({
+  exchange = "Robinhood",
+}: PricechartMorphProps) {
   const [data, setData] = useState<DataPoint[]>(() =>
-    generateInitialData(exchange)
+    generateInitialData(exchange),
   );
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Stream new price data every 2 seconds
+  const exchangeRef = useRef(exchange);
+  const lastPriceRef = useRef(data[data.length - 1].price);
+  const animRef = useRef<ReturnType<typeof animate> | null>(null);
+
+  // Morph to new exchange data on exchange change
   useEffect(() => {
+    if (exchange === exchangeRef.current) return;
+    exchangeRef.current = exchange;
+
+    const target = generateInitialData(exchange);
+    setIsTransitioning(true);
+    animRef.current?.stop();
+
+    setData((prev) => {
+      const from = prev;
+
+      animRef.current = animate(0, 1, {
+        duration: 0.6,
+        ease: [0.25, 0.1, 0.25, 1],
+        onUpdate: (progress) => {
+          setData(
+            from.map((point, i) => ({
+              time: point.time,
+              price: parseFloat(
+                (
+                  point.price +
+                  ((target[i]?.price ?? point.price) - point.price) * progress
+                ).toFixed(4),
+              ),
+            })),
+          );
+        },
+        onComplete: () => {
+          const finalData = target.map((point, i) => ({
+            time: from[i]?.time ?? point.time,
+            price: point.price,
+          }));
+          lastPriceRef.current = finalData[finalData.length - 1].price;
+          setData(finalData);
+          setIsTransitioning(false);
+        },
+      });
+
+      return prev; // don't update yet, animation handles it
+    });
+
+    return () => animRef.current?.stop();
+  }, [exchange]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Stream new price data every 2 seconds (paused during transition)
+  useEffect(() => {
+    if (isTransitioning) return;
+
     const interval = setInterval(() => {
       setData((prev) => {
-        const lastPrice = prev[prev.length - 1].price;
-        const nextPrice = generateNextPrice(lastPrice, exchange);
+        const last = lastPriceRef.current;
+        const nextPrice = generateNextPrice(last, exchangeRef.current);
+        lastPriceRef.current = nextPrice;
         const now = new Date();
         const newPoint: DataPoint = {
           time: now.toLocaleTimeString("en-US", {
@@ -207,7 +202,17 @@ function PricechartInner({ exchange }: { exchange: string }) {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [exchange]);
+  }, [isTransitioning]);
+
+  // Always derive Y domain from current displayed data
+  const prices = data.map((d) => d.price);
+  const dataMin = Math.min(...prices);
+  const dataMax = Math.max(...prices);
+  const dataPadding = (dataMax - dataMin) * 0.15 || 0.01;
+  const yDomain: [number, number] = [
+    parseFloat((dataMin - dataPadding).toFixed(4)),
+    parseFloat((dataMax + dataPadding).toFixed(4)),
+  ];
 
   const latestPrice = data[data.length - 1]?.price ?? BASE_PRICE;
   const firstPrice = data[0]?.price ?? BASE_PRICE;
@@ -264,10 +269,8 @@ function PricechartInner({ exchange }: { exchange: string }) {
             <div className="absolute top-0 left-0 w-full flex justify-between items-start p-2 pointer-events-none z-10">
               <motion.div
                 className="flex flex-col gap-1.5 pointer-events-auto"
-                key={exchange}
-                initial={{ opacity: 0, y: -4 }}
+                initial={{ opacity: 1 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
               >
                 <h3 className="text-[#F9F9F9] font-semibold text-2xl leading-8 tracking-[-0.0056em]">
                   <AnimatedPrice value={latestPrice} />
@@ -275,7 +278,7 @@ function PricechartInner({ exchange }: { exchange: string }) {
                 <p
                   className={cn(
                     "font-medium text-sm leading-4 tracking-[-0.0056em]",
-                    isPositive ? "text-[#6DCB72]" : "text-[#CB6D6D]"
+                    isPositive ? "text-[#6DCB72]" : "text-[#CB6D6D]",
                   )}
                 >
                   {isPositive ? "+" : ""}
@@ -302,7 +305,62 @@ function PricechartInner({ exchange }: { exchange: string }) {
               </div>
             </div>
 
-            <AnimatedAreaChart data={data} />
+            <div className="w-full h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={data}
+                  margin={{ top: 60, right: 5, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient
+                      id="priceGradientMorph"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="0%" stopColor="#6DCB72" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="#6DCB72" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="time" hide />
+                  <YAxis
+                    orientation="right"
+                    domain={yDomain}
+                    stroke="#F9F9F926"
+                    fontSize={10}
+                    tickLine={false}
+                    axisLine={false}
+                    tickCount={8}
+                    tickFormatter={(v: number) => `$${v.toFixed(2)}`}
+                    tick={{ fill: "#F9F9F966", dx: 16 }}
+                    width={55}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      background: "#1a1a1a",
+                      border: "1px solid #333",
+                      borderRadius: "8px",
+                      color: "#f9f9f9",
+                      fontSize: "12px",
+                    }}
+                    labelStyle={{ color: "#999" }}
+                    formatter={(value: number) => [
+                      `$${value.toFixed(4)}`,
+                      "RNDR",
+                    ]}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="price"
+                    stroke="#6DCB72"
+                    strokeWidth={1.5}
+                    fill="url(#priceGradientMorph)"
+                    isAnimationActive={false}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </div>
           <div className="h-12 w-full flex items-center justify-between px-1.5 border-t border-[#F9F9F905]">
             <DurationSection />

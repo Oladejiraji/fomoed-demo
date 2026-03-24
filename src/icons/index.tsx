@@ -156,3 +156,58 @@ export function GreenCheck() {
     </svg>
   );
 }
+export const ExpandIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="12"
+    height="12"
+    fill="none"
+    viewBox="0 0 12 12"
+  >
+    <path
+      stroke="#F9F9F9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeOpacity="0.66"
+      strokeWidth="1.5"
+      d="M7.75.75h2.8m0 0v2.8m0-2.8-4.2 4.2m-5.6 2.8v2.8m0 0h2.8m-2.8 0 4.2-4.2"
+    ></path>
+  </svg>
+);
+
+export const XIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="10"
+    height="10"
+    fill="none"
+    viewBox="0 0 10 10"
+  >
+    <path
+      stroke="#F9F9F9"
+      strokeLinecap="round"
+      strokeOpacity="0.65"
+      strokeWidth="1.5"
+      d="m.75.75 8.4 8.4m0-8.4-8.4 8.4"
+    ></path>
+  </svg>
+);
+
+export const ArrowDownIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="9"
+    height="6"
+    fill="none"
+    viewBox="0 0 9 6"
+  >
+    <path
+      stroke="#F9F9F9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeOpacity="0.34"
+      strokeWidth="1.5"
+      d="m.75.75 3.6 3.6 3.6-3.6"
+    ></path>
+  </svg>
+);
