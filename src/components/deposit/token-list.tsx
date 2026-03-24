@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { GreenCheck } from "@/icons";
+import { CheckIcon } from "@/icons";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { useAtom } from "jotai";
@@ -39,7 +39,7 @@ export function TokenList(props: IProps) {
           </p>
         </div>
         <div className="w-6 h-6 flex items-center justify-center">
-          <GreenCheck />
+          <CheckIcon />
         </div>
       </div>
       <div className="flex-1 overflow-y-auto px-2 flex flex-col relative">
