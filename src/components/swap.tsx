@@ -13,7 +13,7 @@ const SwapInput = (props: IInputProps) => {
       <input
         type="text"
         placeholder={placeholder}
-        className="w-full px-2.5 py-2 placeholder:text-[#f9f9f9] placeholder:opacity-20"
+        className="w-full px-2.5 py-2 placeholder:text-[#f9f9f9] placeholder:opacity-20 outline-none"
       />
       <p className="text-[#f9f9f9] font-medium text-[13px] absolute right-3 top-6/12 -translate-y-6/12">
         {rightText}
