@@ -63,7 +63,7 @@ export const useBTCPriceWebSocket = (
         value: parseFloat(data.k.c), // Close price
       };
 
-      console.log(newDataPoint);
+      // console.log(newDataPoint);
 
       setPriceData((prev) => {
         const updated = [...prev, newDataPoint];

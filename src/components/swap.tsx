@@ -1,15 +1,19 @@
-import { PlusIcon } from "@/icons";
 import React from "react";
+import { PlusIcon } from "@/icons";
 
 interface IInputProps {
   placeholder: string;
   rightText: string;
 }
 
+interface IProps {
+  handleClick: () => void;
+}
+
 const SwapInput = (props: IInputProps) => {
   const { placeholder, rightText } = props;
   return (
-    <div className="h-10 bg-[#121212] rounded-[8px] relative">
+    <div className="h-10 bg-[#121212] rounded-lg relative">
       <input
         type="text"
         placeholder={placeholder}
@@ -22,7 +26,8 @@ const SwapInput = (props: IInputProps) => {
   );
 };
 
-const Swap = () => {
+const Swap = (props: IProps) => {
+  const { handleClick } = props;
   return (
     <div>
       <div className="flex justify-between items-center mb-2">
@@ -33,9 +38,13 @@ const Swap = () => {
           <p className="text-[#f9f9f9] text-xs font-semibold opacity-90">
             $24,293.20
           </p>
-          <div className="size-5 rounded-full flex items-center justify-center bg-[#121212]">
+          <button
+            type="button"
+            onClick={handleClick}
+            className="size-5 rounded-full flex items-center justify-center bg-[#121212]"
+          >
             <PlusIcon />
-          </div>
+          </button>
         </div>
       </div>
       <div className="flex flex-col gap-1">
