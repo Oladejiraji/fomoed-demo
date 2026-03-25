@@ -15,7 +15,7 @@ export function NetworkList(props: IProps) {
   const [selectedNetwork, setSelectedNetwork] = useAtom(selectedNetworkAtom);
 
   return (
-    <div className="max-w-[320px] w-full max-h-86 flex flex-col overflow-hidden shadow-[0_0_0_1px_rgba(92,92,92,0.45)] bg-[linear-gradient(180deg,#1f1f21_0%,#1a1a1c_100%)] rounded-2xl">
+    <div className="max-w-[320px] mx-auto w-full max-h-86 flex flex-col overflow-hidden shadow-[0_0_0_1px_rgba(92,92,92,0.45)] bg-[linear-gradient(180deg,#1f1f21_0%,#1a1a1c_100%)] rounded-2xl">
       <div className="h-12 px-4 flex items-center justify-between border-b border-[#262626]">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
@@ -64,12 +64,18 @@ export function NetworkList(props: IProps) {
                 }
               }}
               onMouseEnter={() => {
-                if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+                if (
+                  window.matchMedia("(hover: hover) and (pointer: fine)")
+                    .matches
+                ) {
                   setHoveredIndex(index);
                 }
               }}
               onMouseLeave={() => {
-                if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+                if (
+                  window.matchMedia("(hover: hover) and (pointer: fine)")
+                    .matches
+                ) {
                   setHoveredIndex(null);
                 }
               }}

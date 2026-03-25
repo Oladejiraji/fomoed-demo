@@ -11,14 +11,14 @@ interface IProps {
 }
 
 const enterTransition = {
-  type: "spring",
+  type: "spring" as const,
   duration: 0.4,
   bounce: 0.1,
 };
 
 const exitTransition = {
   duration: 0.2,
-  ease: [0.32, 0.72, 0, 1],
+  ease: [0.32, 0.72, 0, 1] as [number, number, number, number],
 };
 
 const panelVariants = {
@@ -48,7 +48,7 @@ export function DepositFlow(props: IProps) {
       {showDepositModal && (
         <div
           key="deposit"
-          className="absolute inset-0 z-11 flex items-end"
+          className="absolute inset-0 z-11 flex items-end pb-px"
           onClick={() => setShowDepositModal(false)}
         >
           <motion.div
@@ -71,7 +71,7 @@ export function DepositFlow(props: IProps) {
       {showTokens && (
         <div
           key="token-list"
-          className="absolute inset-0 z-12 flex items-end"
+          className="absolute inset-0 z-12 flex items-end pb-px"
           onClick={() => setShowTokens(false)}
         >
           <motion.div
@@ -90,7 +90,7 @@ export function DepositFlow(props: IProps) {
       {showNetworks && (
         <div
           key="network-list"
-          className="absolute inset-0 z-12 flex items-end"
+          className="absolute inset-0 z-12 flex items-end pb-px"
           onClick={() => setShowNetworks(false)}
         >
           <motion.div
@@ -109,7 +109,7 @@ export function DepositFlow(props: IProps) {
       {showConfirm && (
         <div
           key="confirm"
-          className="absolute inset-0 z-12 flex items-end"
+          className="absolute inset-0 z-12 flex items-end pb-px"
           onClick={() => setShowConfirm(false)}
         >
           <motion.div

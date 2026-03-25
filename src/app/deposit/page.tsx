@@ -8,7 +8,7 @@ export default function DepositPage() {
 
   return (
     <div className="flex items-center justify-center bg-[#0C0C0C] h-screen overflow-hidden">
-      <div className="w-full max-w-[320px] h-135 relative overflow-hidden flex flex-col justify-center">
+      <div className="w-full max-w-81.25 h-135 relative overflow-hidden flex flex-col justify-center">
         <div className="w-full max-w-75 mx-auto flex flex-col gap-4 ">
           <Swap handleClick={() => setShowDepositModal(true)} />
           <button
