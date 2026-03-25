@@ -14,6 +14,7 @@ export function DepositFlow(props: IProps) {
   const { showDepositModal, setShowDepositModal } = props;
   const [showTokens, setShowTokens] = useState(false);
   const [showNetworks, setShowNetworks] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   return (
     <AnimatePresence>
@@ -84,22 +85,25 @@ export function DepositFlow(props: IProps) {
           </motion.div>
         </div>
       )}
-      <div
-        key="network-list"
-        className="absolute inset-0 z-12 flex items-end"
-        onClick={() => setShowNetworks(false)}
-      >
-        <motion.div
-          className="w-full"
-          onClick={(e) => e.stopPropagation()}
-          initial={{ y: "100%", filter: "blur(4px)" }}
-          animate={{ y: 0, filter: "blur(0px)" }}
-          exit={{ y: "100%", filter: "blur(4px)" }}
-          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+
+      {showConfirm && (
+        <div
+          key="confirm"
+          className="absolute inset-0 z-12 flex items-end"
+          onClick={() => setShowConfirm(false)}
         >
-          <Confirm />
-        </motion.div>
-      </div>
+          <motion.div
+            className="w-full"
+            onClick={(e) => e.stopPropagation()}
+            initial={{ y: "100%", filter: "blur(4px)" }}
+            animate={{ y: 0, filter: "blur(0px)" }}
+            exit={{ y: "100%", filter: "blur(4px)" }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          >
+            <Confirm />
+          </motion.div>
+        </div>
+      )}
     </AnimatePresence>
   );
 }
