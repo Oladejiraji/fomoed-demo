@@ -48,6 +48,11 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+html,
+body {
+  overscroll-behavior: none;
+}
+
 body {
   font-family: var(--font-geist-sans), sans-serif;
 }
