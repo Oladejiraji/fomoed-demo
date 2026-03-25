@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { animate } from "motion/react";
+import { animate, AnimatePresence, motion } from "motion/react";
 import { TextMorph } from "torph/react";
 import { Spinner } from "../ui/spinner";
 import { CheckIcon } from "@/icons";
@@ -10,6 +10,7 @@ function ConfirmationBadge({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     const controls = animate(0, 190, {
       duration: 4,
+      ease: "easeOut",
       onUpdate: (v) => setConfirmations(Math.round(v)),
       onComplete,
     });
@@ -40,14 +41,28 @@ export function Confirm() {
 
       <div className="flex-1 flex flex-col gap-22.5">
         <div className="flex flex-col gap-1 items-center">
-          <div className="w-8.5 h-8.5">
-            {done ? (
-              <div className="w-full h-full flex items-center justify-center bg-[#4CAF82] rounded-full">
-                <CheckIcon fill="#fff" />
-              </div>
-            ) : (
-              <Spinner className="size-8.5 text-[#575757]" />
-            )}
+          <div className="w-8.5 h-8.5 relative">
+            <AnimatePresence mode="wait">
+              {done ? (
+                <motion.div
+                  key="check"
+                  className="w-full h-full flex items-center justify-center bg-[#4CAF82] rounded-full"
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
+                >
+                  <CheckIcon fill="#fff" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="spinner"
+                  className="w-full h-full"
+                  exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.1, ease: "easeIn" } }}
+                >
+                  <Spinner className="size-8.5 text-[#575757]" />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
           <p className="text-[#1D1D1D] font-semibold tracking-[-0.0056em] text-[32px]">
             $7,012

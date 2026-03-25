@@ -10,6 +10,33 @@ interface IProps {
   setShowDepositModal: (value: boolean) => void;
 }
 
+const enterTransition = {
+  type: "spring",
+  duration: 0.4,
+  bounce: 0.1,
+};
+
+const exitTransition = {
+  duration: 0.2,
+  ease: [0.32, 0.72, 0, 1],
+};
+
+const panelVariants = {
+  initial: { transform: "translateY(100%)", opacity: 0, filter: "blur(4px)" },
+  animate: {
+    transform: "translateY(0%)",
+    opacity: 1,
+    filter: "blur(0px)",
+    transition: enterTransition,
+  },
+  exit: {
+    transform: "translateY(100%)",
+    opacity: 0,
+    filter: "blur(4px)",
+    transition: exitTransition,
+  },
+};
+
 export function DepositFlow(props: IProps) {
   const { showDepositModal, setShowDepositModal } = props;
   const [showTokens, setShowTokens] = useState(false);
@@ -26,18 +53,11 @@ export function DepositFlow(props: IProps) {
         >
           <motion.div
             className="w-full"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            initial={{ y: "100%", filter: "blur(4px)" }}
-            animate={{ y: 0, filter: "blur(0px)" }}
-            exit={{ y: "100%", filter: "blur(4px)" }}
-            transition={{
-              type: "spring",
-              stiffness: 400,
-              damping: 30,
-            }}
-            // transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            onClick={(e) => e.stopPropagation()}
+            variants={panelVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
             <Deposit
               handleClose={() => setShowDepositModal(false)}
@@ -57,10 +77,10 @@ export function DepositFlow(props: IProps) {
           <motion.div
             className="w-full"
             onClick={(e) => e.stopPropagation()}
-            initial={{ y: "100%", filter: "blur(4px)" }}
-            animate={{ y: 0, filter: "blur(0px)" }}
-            exit={{ y: "100%", filter: "blur(4px)" }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            variants={panelVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
             <TokenList handleClose={() => setShowTokens(false)} />
           </motion.div>
@@ -76,10 +96,10 @@ export function DepositFlow(props: IProps) {
           <motion.div
             className="w-full"
             onClick={(e) => e.stopPropagation()}
-            initial={{ y: "100%", filter: "blur(4px)" }}
-            animate={{ y: 0, filter: "blur(0px)" }}
-            exit={{ y: "100%", filter: "blur(4px)" }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            variants={panelVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
             <NetworkList handleClose={() => setShowNetworks(false)} />
           </motion.div>
@@ -95,10 +115,10 @@ export function DepositFlow(props: IProps) {
           <motion.div
             className="w-full"
             onClick={(e) => e.stopPropagation()}
-            initial={{ y: "100%", filter: "blur(4px)" }}
-            animate={{ y: 0, filter: "blur(0px)" }}
-            exit={{ y: "100%", filter: "blur(4px)" }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            variants={panelVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
             <Confirm />
           </motion.div>

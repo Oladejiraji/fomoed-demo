@@ -35,7 +35,7 @@ export function Deposit(props: IProps) {
       <div className="flex items-center justify-between">
         <div className="w-6 h-6 invisible"></div>
 
-        <p className="text-xs leading-[1.23] text-[#f9f9f9] font-medium">
+        <p style={{ fontFamily: "var(--second-family)" }} className="font-medium text-[13px] leading-[1.23] tracking-[-0.01em] text-[#f9f9f9]">
           Deposit
         </p>
 
@@ -51,7 +51,7 @@ export function Deposit(props: IProps) {
       <div className="flex gap-4 flex-col">
         <div className="flex gap-2 flex-col">
           <div className="flex flex-col gap-1">
-            <p className="py-1 pl-0.5 text-xs font-medium text-[rgba(249,249,249,0.3)] tracking-[0.003em] leading-none">
+            <p style={{ fontFamily: "var(--second-family)" }} className="py-1 pl-0.5 text-[12px] font-medium text-[rgba(249,249,249,0.3)] tracking-[0em] leading-none">
               Select Token
             </p>
             <button
@@ -66,6 +66,7 @@ export function Deposit(props: IProps) {
                       width={24}
                       height={24}
                       alt={selectedToken.label}
+                      className={selectedToken.imageClassName}
                     />
                   </div>
                   <p className="text-xs leading-none font-medium tracking-[-0.004em] text-[#F9F9F9]">
@@ -80,7 +81,7 @@ export function Deposit(props: IProps) {
             </button>
           </div>
           <div className="flex flex-col gap-1">
-            <p className="py-1 pl-0.5 text-xs font-medium text-[rgba(249,249,249,0.3)] tracking-[0.003em] leading-none">
+            <p style={{ fontFamily: "var(--second-family)" }} className="py-1 pl-0.5 text-[12px] font-medium text-[rgba(249,249,249,0.3)] tracking-[0em] leading-none">
               Select Network
             </p>
             <button onClick={handleShowNetworks} className="rounded-[10px] shadow-[0_0_0_1px_rgba(91,91,91,0.25),0_8px_24px_0_rgba(0,0,0,0.02)] bg-[rgba(249,249,249,0.05)] overflow-hidden cursor-pointer">
@@ -108,7 +109,7 @@ export function Deposit(props: IProps) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <p className="py-1 pl-0.5 text-xs font-medium text-[rgba(249,249,249,0.9)] tracking-[0.003em] leading-none">
+          <p style={{ fontFamily: "var(--second-family)" }} className="py-1 pl-0.5 text-[12px] font-medium text-[rgba(249,249,249,0.3)] tracking-[0em] leading-none">
             Your deposit address
           </p>
 
@@ -125,21 +126,23 @@ export function Deposit(props: IProps) {
             >
               <div className="h-6 w-6 flex justify-center items-center relative">
                 <div
-                  className="absolute inset-0 flex justify-center items-center transition-all duration-300"
+                  className="absolute inset-0 flex justify-center items-center"
                   style={{
                     opacity: copied ? 0 : 1,
                     filter: copied ? "blur(4px)" : "blur(0px)",
-                    transform: copied ? "scale(0.8)" : "scale(1)",
+                    transform: copied ? "scale(0.85)" : "scale(1)",
+                    transition: "transform 160ms ease-out, opacity 160ms ease-out, filter 160ms ease-out",
                   }}
                 >
                   <Copy />
                 </div>
                 <div
-                  className="absolute inset-0 flex justify-center items-center transition-all duration-300"
+                  className="absolute inset-0 flex justify-center items-center"
                   style={{
                     opacity: copied ? 1 : 0,
                     filter: copied ? "blur(0px)" : "blur(4px)",
-                    transform: copied ? "scale(1)" : "scale(0.8)",
+                    transform: copied ? "scale(1)" : "scale(0.85)",
+                    transition: "transform 160ms ease-out, opacity 160ms ease-out, filter 160ms ease-out",
                   }}
                 >
                   <CheckIcon fill="#F9F9F9" />

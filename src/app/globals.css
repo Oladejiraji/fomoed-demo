@@ -137,3 +137,21 @@ body {
     @apply font-sans;
   }
 }
+
+.scrollbar-minimal {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(249, 249, 249, 0.04) transparent;
+}
+
+.scrollbar-minimal::-webkit-scrollbar {
+  width: 3px;
+}
+
+.scrollbar-minimal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-minimal::-webkit-scrollbar-thumb {
+  background: rgba(249, 249, 249, 0.04);
+  border-radius: 999px;
+}
