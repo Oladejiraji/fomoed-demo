@@ -44,10 +44,10 @@ export function Deposit(props: IProps) {
         className="pt-3.5 px-4 pb-6 flex flex-col gap-6"
         animate={{
           opacity: showConfirm ? 0 : 1,
-          filter: showConfirm ? "blur(8px)" : "blur(0px)",
+          filter: showConfirm ? "blur(4px)" : "blur(0px)",
           transform: showConfirm ? "translateY(-20px)" : "translateY(0px)",
         }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
       >
         <div className="flex items-center justify-between">
           <div className="w-6 h-6 invisible" />
@@ -57,7 +57,7 @@ export function Deposit(props: IProps) {
           <button
             type="button"
             onClick={handleClose}
-            className="w-6 h-6 rounded-full flex justify-center items-center bg-[#171719] cursor-pointer"
+            className="w-6 h-6 rounded-full flex justify-center items-center bg-[#171719] cursor-pointer transition-transform duration-[160ms] ease-out active:scale-[0.97]"
           >
             <CloseIcon />
           </button>
@@ -123,7 +123,7 @@ export function Deposit(props: IProps) {
               <button
                 type="button"
                 onClick={handleCopy}
-                className="flex items-center justify-center h-10 shadow-[0_8px_24px_0_rgba(0,0,0,0.02)] bg-[rgba(249,249,249,0.05)] cursor-pointer"
+                className="flex items-center justify-center h-10 shadow-[0_8px_24px_0_rgba(0,0,0,0.02)] bg-[rgba(249,249,249,0.05)] cursor-pointer transition-transform duration-[160ms] ease-out active:scale-[0.98]"
               >
                 <div className="h-6 w-6 flex justify-center items-center relative">
                   <div
@@ -189,20 +189,20 @@ export function Deposit(props: IProps) {
               opacity: 1,
               boxShadow: "inset 0 0 0 0px transparent",
             }}
-            transition={{ type: "spring", duration: 0.6, bounce: 0.05 }}
+            transition={{ type: "spring", duration: 0.45, bounce: 0.05 }}
           >
             {/* Confirm content fades in once pill has expanded */}
             <motion.div
-              className="pt-3.5 px-4 pb-6 flex flex-col gap-7.5"
+              className="pt-3.5 px-4 pb-6 flex flex-col gap-7.5 h-full"
               initial={{ opacity: 0, filter: "blur(4px)", transform: "translateY(8px)" }}
               animate={{ opacity: 1, filter: "blur(0px)", transform: "translateY(0px)" }}
-              transition={{ delay: 0.32, duration: 0.25, ease: "easeOut" }}
+              transition={{ delay: 0.28, duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
             >
               <div className="flex items-center justify-between">
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="w-6 h-6 rounded-full flex justify-center items-center bg-[rgba(0,0,0,0.06)] cursor-pointer pointer-events-auto"
+                  className="w-6 h-6 rounded-full flex justify-center items-center bg-[rgba(0,0,0,0.06)] cursor-pointer pointer-events-auto transition-transform duration-[160ms] ease-out active:scale-[0.97]"
                 >
                   <BackArrowIcon />
                 </button>

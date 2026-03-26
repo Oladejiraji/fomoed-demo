@@ -1,25 +1,32 @@
-import { motion } from "motion/react";
-
 function Spinner({ className }: { className?: string }) {
   return (
-    <motion.svg
+    <svg
       width="28"
       height="28"
       viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      animate={{ rotate: 360 }}
-      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
     >
-      <circle cx="14" cy="14" r="11" stroke="#C8C8C8" strokeWidth="2" />
+      <style>{`
+        @keyframes spin-arc {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        .spinner-arc {
+          transform-origin: 14px 14px;
+          animation: spin-arc 0.75s linear infinite;
+        }
+      `}</style>
+      <circle cx="14" cy="14" r="12" stroke="#BBBBBB" strokeWidth="3.5" />
       <path
-        d="M14 3 A 11 11 0 0 1 25 14"
+        className="spinner-arc"
+        d="M14 2 A 12 12 0 0 1 24.39 8"
         stroke="#4A4A4A"
-        strokeWidth="2"
+        strokeWidth="3.5"
         strokeLinecap="round"
       />
-    </motion.svg>
+    </svg>
   );
 }
 
