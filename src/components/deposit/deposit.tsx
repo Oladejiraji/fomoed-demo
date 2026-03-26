@@ -28,6 +28,7 @@ export function Deposit(props: IProps) {
   const selectedToken = useAtomValue(selectedTokenAtom);
   const selectedNetwork = useAtomValue(selectedNetworkAtom);
   const [copied, setCopied] = useState(false);
+  const [confirmDone, setConfirmDone] = useState(false);
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(DEPOSIT_ADDRESS);
@@ -206,12 +207,34 @@ export function Deposit(props: IProps) {
                 >
                   <BackArrowIcon />
                 </button>
-                <p style={{ fontFamily: "var(--second-family)", letterSpacing: "-0.01em" }} className="font-medium text-[13px] leading-[1.23] text-[#1D1D1D]">
-                  Deposit Pending
-                </p>
+                <div className="relative flex items-center justify-center" style={{ height: 16 }}>
+                  <AnimatePresence mode="wait">
+                    {!confirmDone ? (
+                      <motion.p
+                        key="header-pending"
+                        style={{ fontFamily: "var(--second-family)", letterSpacing: "-0.01em" }}
+                        className="font-medium text-[13px] leading-[1.23] text-[#1D1D1D]"
+                        exit={{ opacity: 0, filter: "blur(6px)", transform: "translateY(-6px)", transition: { duration: 0.2, ease: "easeIn" } }}
+                      >
+                        Deposit Pending
+                      </motion.p>
+                    ) : (
+                      <motion.p
+                        key="header-done"
+                        style={{ fontFamily: "var(--second-family)", letterSpacing: "-0.01em" }}
+                        className="font-medium text-[13px] leading-[1.23] text-[#1D1D1D]"
+                        initial={{ opacity: 0, filter: "blur(6px)", transform: "translateY(6px)" }}
+                        animate={{ opacity: 1, filter: "blur(0px)", transform: "translateY(0px)" }}
+                        transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+                      >
+                        Deposit Successful
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </div>
                 <div className="w-6 h-6 invisible" />
               </div>
-              <ConfirmContent />
+              <ConfirmContent onDone={() => setConfirmDone(true)} />
             </motion.div>
           </motion.div>
         )}

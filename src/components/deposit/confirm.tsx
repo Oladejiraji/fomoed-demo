@@ -40,7 +40,7 @@ function USDCBadge({ shimmer }: { shimmer: boolean }) {
   );
 }
 
-export function ConfirmContent() {
+export function ConfirmContent({ onDone }: { onDone?: () => void }) {
   const [shimmer, setShimmer] = useState(false);
   const [expanding, setExpanding] = useState(false);
   const [done, setDone] = useState(false);
@@ -73,7 +73,7 @@ export function ConfirmContent() {
                 }}
                 exit={{ opacity: 0, transition: { duration: 0.2, ease: "easeIn" } }}
                 onAnimationComplete={() => {
-                  if (expanding) setDone(true);
+                  if (expanding) { setDone(true); onDone?.(); }
                 }}
               >
                 <Spinner className="size-7" />
