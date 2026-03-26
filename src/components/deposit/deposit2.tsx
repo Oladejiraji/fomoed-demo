@@ -1,11 +1,10 @@
 import React, { useState, useCallback } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { CaretDown, CloseIcon, Copy, CheckIcon, BackArrowIcon } from "@/icons";
+import { motion } from "motion/react";
+import { CaretDown, CloseIcon, Copy, CheckIcon } from "@/icons";
 import Image from "next/image";
 import { useAtomValue } from "jotai";
 import { selectedTokenAtom, selectedNetworkAtom } from "@/lib/atoms/deposit";
 import { TextMorph } from "torph/react";
-import { ConfirmContent } from "./confirm";
 
 interface IProps {
   handleClose?: () => void;
@@ -23,18 +22,17 @@ function shortenAddress(address: string, length = 32): string {
 
 const DEPOSIT_ADDRESS = "0x072461657Cce07B6469Eb0f9D5E564531bB45e79";
 
-export function Deposit(props: IProps) {
+export function Deposit2(props: IProps) {
   const {
     handleClose,
     handleShowTokens,
     handleShowNetworks,
-    handleBack,
+
     showConfirm = false,
   } = props;
   const selectedToken = useAtomValue(selectedTokenAtom);
   const selectedNetwork = useAtomValue(selectedNetworkAtom);
   const [copied, setCopied] = useState(false);
-  const [confirmDone, setConfirmDone] = useState(false);
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(DEPOSIT_ADDRESS);
@@ -200,116 +198,6 @@ export function Deposit(props: IProps) {
             </div>
           </div>
         </motion.div>
-
-        {/* Straight-edge clip — clip-path clips to rectangle, no border-radius rounding */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ clipPath: "inset(0)" }}
-        >
-          {/* Pill — mounts at pill shape, springs up to fill card */}
-          <AnimatePresence>
-            {showConfirm && (
-              <motion.div
-                className="absolute bottom-0 left-0 right-0 overflow-hidden bg-[linear-gradient(180deg,#d1d1d1_0%,#b3b3b3_100%)]"
-                initial={{
-                  height: 78,
-                  borderRadius: "45px 45px 0px 0px",
-                  opacity: 0.3,
-                  boxShadow: "inset 0 0 0 2px #aaa",
-                }}
-                animate={{
-                  height: "100%",
-                  borderRadius: "16px",
-                  opacity: 1,
-                  boxShadow: "inset 0 0 0 0px transparent",
-                }}
-                transition={{ type: "spring", duration: 0.45, bounce: 0.05 }}
-              >
-                {/* Confirm content fades in once pill has expanded */}
-                <motion.div
-                  className="pt-3.5 px-4 pb-6 flex flex-col gap-7.5 h-full"
-                  initial={{
-                    opacity: 0,
-                    filter: "blur(4px)",
-                    transform: "translateY(8px)",
-                  }}
-                  animate={{
-                    opacity: 1,
-                    filter: "blur(0px)",
-                    transform: "translateY(0px)",
-                  }}
-                  transition={{
-                    delay: 0.28,
-                    duration: 0.25,
-                    ease: [0.23, 1, 0.32, 1],
-                  }}
-                >
-                  <div className="flex items-center justify-between">
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="w-6 h-6 rounded-full flex justify-center items-center bg-[rgba(0,0,0,0.06)] cursor-pointer pointer-events-auto transition-transform duration-[160ms] ease-out active:scale-[0.97]"
-                    >
-                      <BackArrowIcon />
-                    </button>
-                    <div
-                      className="relative flex items-center justify-center"
-                      style={{ height: 16 }}
-                    >
-                      <AnimatePresence mode="wait">
-                        {!confirmDone ? (
-                          <motion.p
-                            key="header-pending"
-                            style={{
-                              fontFamily: "var(--second-family)",
-                              letterSpacing: "-0.01em",
-                            }}
-                            className="font-medium text-[13px] leading-[1.23] text-[#1D1D1D]"
-                            exit={{
-                              opacity: 0,
-                              filter: "blur(6px)",
-                              transform: "translateY(-6px)",
-                              transition: { duration: 0.2, ease: "easeIn" },
-                            }}
-                          >
-                            Deposit Pending
-                          </motion.p>
-                        ) : (
-                          <motion.p
-                            key="header-done"
-                            style={{
-                              fontFamily: "var(--second-family)",
-                              letterSpacing: "-0.01em",
-                            }}
-                            className="font-medium text-[13px] leading-[1.23] text-[#1D1D1D]"
-                            initial={{
-                              opacity: 0,
-                              filter: "blur(6px)",
-                              transform: "translateY(6px)",
-                            }}
-                            animate={{
-                              opacity: 1,
-                              filter: "blur(0px)",
-                              transform: "translateY(0px)",
-                            }}
-                            transition={{
-                              duration: 0.25,
-                              ease: [0.23, 1, 0.32, 1],
-                            }}
-                          >
-                            Deposit Successful
-                          </motion.p>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                    <div className="w-6 h-6 invisible" />
-                  </div>
-                  <ConfirmContent onDone={() => setConfirmDone(true)} />
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
       </div>
     </div>
   );

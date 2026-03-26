@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { Deposit } from "../deposit/deposit";
 import { TokenList } from "../deposit/token-list";
 import { NetworkList } from "../deposit/network-list";
+import { Confirm } from "../deposit/confirm";
+import { Deposit2 } from "../deposit/deposit2";
 
 interface IProps {
   showDepositModal: boolean;
@@ -18,6 +20,26 @@ const enterTransition = {
 const exitTransition = {
   duration: 0.2,
   ease: [0.32, 0.72, 0, 1] as [number, number, number, number],
+};
+
+const whitePanelVariants = {
+  initial: {
+    transform: "translateY(calc(100% + 0px))",
+    opacity: 0,
+    filter: "blur(4px)",
+  },
+  animate: {
+    transform: "translateY(-60px)",
+    opacity: 1,
+    filter: "blur(0px)",
+    transition: enterTransition,
+  },
+  exit: {
+    transform: "translateY(calc(100% + 0px))",
+    opacity: 0,
+    filter: "blur(4px)",
+    transition: exitTransition,
+  },
 };
 
 const panelVariants = {
@@ -36,7 +58,7 @@ const panelVariants = {
   },
 };
 
-export function DepositFlow(props: IProps) {
+export function DepositFlow2(props: IProps) {
   const { showDepositModal, setShowDepositModal } = props;
   const [showTokens, setShowTokens] = useState(false);
   const [showNetworks, setShowNetworks] = useState(false);
@@ -48,12 +70,14 @@ export function DepositFlow(props: IProps) {
     idleTimer.current = setTimeout(() => setShowConfirm(true), 4000);
   }, []);
 
+  const handleClose = useCallback(() => {
+    setShowDepositModal(false);
+    setShowConfirm(false);
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+  }, [setShowDepositModal]);
+
   useEffect(() => {
-    if (!showDepositModal) {
-      setShowConfirm(false);
-      if (idleTimer.current) clearTimeout(idleTimer.current);
-      return;
-    }
+    if (!showDepositModal) return;
     resetIdleTimer();
     return () => {
       if (idleTimer.current) clearTimeout(idleTimer.current);
@@ -66,7 +90,7 @@ export function DepositFlow(props: IProps) {
         <div
           key="deposit"
           className="absolute inset-0 z-11 flex items-end pb-px"
-          onClick={() => setShowDepositModal(false)}
+          onClick={handleClose}
         >
           <motion.div
             className="w-full"
@@ -77,8 +101,8 @@ export function DepositFlow(props: IProps) {
             animate="animate"
             exit="exit"
           >
-            <Deposit
-              handleClose={() => setShowDepositModal(false)}
+            <Deposit2
+              handleClose={handleClose}
               handleShowTokens={() => setShowTokens(true)}
               handleShowNetworks={() => setShowNetworks(true)}
               handleBack={() => {
@@ -124,6 +148,29 @@ export function DepositFlow(props: IProps) {
             exit="exit"
           >
             <NetworkList handleClose={() => setShowNetworks(false)} />
+          </motion.div>
+        </div>
+      )}
+
+      {showConfirm && (
+        <div
+          key="confirm"
+          className="absolute inset-0 z-12 flex items-end pb-px"
+          onClick={() => setShowConfirm(false)}
+        >
+          <motion.div
+            className="w-full"
+            onClick={(e) => e.stopPropagation()}
+            variants={panelVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Confirm
+              handleClose={() => {
+                setShowConfirm(false);
+              }}
+            />
           </motion.div>
         </div>
       )}
