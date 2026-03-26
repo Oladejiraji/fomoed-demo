@@ -1,17 +1,26 @@
-import { cn } from "@/lib/utils"
-import { Loader2Icon } from "lucide-react"
-import { motion } from "motion/react"
+import { motion } from "motion/react";
 
-function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
+function Spinner({ className }: { className?: string }) {
   return (
-    <motion.div
+    <motion.svg
+      width="28"
+      height="28"
+      viewBox="0 0 28 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
       animate={{ rotate: 360 }}
       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-      style={{ display: "flex" }}
     >
-      <Loader2Icon role="status" aria-label="Loading" className={cn("size-4", className)} {...props} />
-    </motion.div>
-  )
+      <circle cx="14" cy="14" r="11" stroke="#C8C8C8" strokeWidth="2" />
+      <path
+        d="M14 3 A 11 11 0 0 1 25 14"
+        stroke="#4A4A4A"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </motion.svg>
+  );
 }
 
-export { Spinner }
+export { Spinner };

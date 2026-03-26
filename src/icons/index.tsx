@@ -96,6 +96,27 @@ export function CloseIcon() {
   );
 }
 
+export function BackArrowIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.80156 2.40156L4.20156 6.00156L7.80156 9.60156"
+        stroke="#1D1D1D"
+        strokeOpacity="0.6"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function CaretDown() {
   return (
     <svg

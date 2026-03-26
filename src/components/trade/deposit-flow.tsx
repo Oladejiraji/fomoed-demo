@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Deposit } from "../deposit/deposit";
 import { TokenList } from "../deposit/token-list";
 import { NetworkList } from "../deposit/network-list";
-import { Confirm } from "../deposit/confirm";
 
 interface IProps {
   showDepositModal: boolean;
@@ -42,6 +41,24 @@ export function DepositFlow(props: IProps) {
   const [showTokens, setShowTokens] = useState(false);
   const [showNetworks, setShowNetworks] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const resetIdleTimer = useCallback(() => {
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    idleTimer.current = setTimeout(() => setShowConfirm(true), 4000);
+  }, []);
+
+  useEffect(() => {
+    if (!showDepositModal) {
+      setShowConfirm(false);
+      if (idleTimer.current) clearTimeout(idleTimer.current);
+      return;
+    }
+    resetIdleTimer();
+    return () => {
+      if (idleTimer.current) clearTimeout(idleTimer.current);
+    };
+  }, [showDepositModal, resetIdleTimer]);
 
   return (
     <AnimatePresence>
@@ -54,6 +71,7 @@ export function DepositFlow(props: IProps) {
           <motion.div
             className="w-full"
             onClick={(e) => e.stopPropagation()}
+            onPointerMove={resetIdleTimer}
             variants={panelVariants}
             initial="initial"
             animate="animate"
@@ -63,6 +81,8 @@ export function DepositFlow(props: IProps) {
               handleClose={() => setShowDepositModal(false)}
               handleShowTokens={() => setShowTokens(true)}
               handleShowNetworks={() => setShowNetworks(true)}
+              handleBack={() => { setShowConfirm(false); }}
+              showConfirm={showConfirm}
             />
           </motion.div>
         </div>
@@ -102,25 +122,6 @@ export function DepositFlow(props: IProps) {
             exit="exit"
           >
             <NetworkList handleClose={() => setShowNetworks(false)} />
-          </motion.div>
-        </div>
-      )}
-
-      {showConfirm && (
-        <div
-          key="confirm"
-          className="absolute inset-0 z-12 flex items-end pb-px"
-          onClick={() => setShowConfirm(false)}
-        >
-          <motion.div
-            className="w-full"
-            onClick={(e) => e.stopPropagation()}
-            variants={panelVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Confirm />
           </motion.div>
         </div>
       )}
