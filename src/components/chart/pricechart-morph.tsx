@@ -176,7 +176,7 @@ export function PricechartMorph({
     });
 
     return () => animRef.current?.stop();
-  }, [exchange]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [exchange]);
 
   // Stream new price data every 2 seconds (paused during transition)
   useEffect(() => {

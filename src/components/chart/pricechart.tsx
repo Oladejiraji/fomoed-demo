@@ -53,9 +53,7 @@ function generateInitialData(exchange: string): DataPoint[] {
 function generateNextPrice(lastPrice: number, exchange: string): number {
   const config = exchangeConfig[exchange] || { offset: 0, volatility: 0.012 };
   const change = (Math.random() - 0.48) * config.volatility * lastPrice;
-  return parseFloat(
-    Math.max(lastPrice + change, BASE_PRICE * 0.85).toFixed(4)
-  );
+  return parseFloat(Math.max(lastPrice + change, BASE_PRICE * 0.85).toFixed(4));
 }
 
 const durationOptions = [
@@ -69,7 +67,7 @@ const durationOptions = [
   { id: 8, label: "1D", value: "1d" },
 ];
 
-function DurationSection() {
+export function DurationSection() {
   const [selectedDuration, setSelectedDuration] = useState("all");
 
   return (
@@ -85,7 +83,7 @@ function DurationSection() {
             type="button"
             className={cn(
               "font-medium text-xs leading-5 tracking-[-0.0056em] text-[#F9F9F980] py-0.5 px-2.5 rounded-md cursor-pointer",
-              isActive && activeClassName
+              isActive && activeClassName,
             )}
             onClick={() => {
               setSelectedDuration(item?.value);
@@ -155,7 +153,7 @@ function AnimatedAreaChart({ data }: { data: DataPoint[] }) {
               fontSize: "12px",
             }}
             labelStyle={{ color: "#999" }}
-            formatter={(value: number) => [`$${value.toFixed(4)}`, "RNDR"]}
+            formatter={(value) => [`$${Number(value).toFixed(4)}`, "RNDR"]}
           />
           <Area
             type="monotone"
@@ -183,7 +181,7 @@ export function Pricechart({ exchange = "Robinhood" }: PricechartProps) {
 
 function PricechartInner({ exchange }: { exchange: string }) {
   const [data, setData] = useState<DataPoint[]>(() =>
-    generateInitialData(exchange)
+    generateInitialData(exchange),
   );
 
   // Stream new price data every 2 seconds
@@ -275,7 +273,7 @@ function PricechartInner({ exchange }: { exchange: string }) {
                 <p
                   className={cn(
                     "font-medium text-sm leading-4 tracking-[-0.0056em]",
-                    isPositive ? "text-[#6DCB72]" : "text-[#CB6D6D]"
+                    isPositive ? "text-[#6DCB72]" : "text-[#CB6D6D]",
                   )}
                 >
                   {isPositive ? "+" : ""}
