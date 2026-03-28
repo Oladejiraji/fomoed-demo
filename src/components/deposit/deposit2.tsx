@@ -47,9 +47,12 @@ export function Deposit2(props: IProps) {
         <motion.div
           className="pt-3.5 px-4 pb-6 flex flex-col gap-6"
           animate={{
-            opacity: showConfirm ? 0 : 1,
-            filter: showConfirm ? "blur(4px)" : "blur(0px)",
-            transform: showConfirm ? "translateY(-20px)" : "translateY(0px)",
+            opacity: 1,
+            filter: "blur(0px)",
+            transform: "translateY(0px)",
+            // opacity: showConfirm ? 0 : 1,
+            // filter: showConfirm ? "blur(4px)" : "blur(0px)",
+            // transform: showConfirm ? "translateY(-20px)" : "translateY(0px)",
           }}
           transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
         >

@@ -22,20 +22,39 @@ const exitTransition = {
   ease: [0.32, 0.72, 0, 1] as [number, number, number, number],
 };
 
+// const whitePanelVariants = {
+//   initial: {
+//     transform: "translateY(calc(100% + 0px))",
+//     opacity: 0,
+//     filter: "blur(4px)",
+//   },
+//   animate: {
+//     transform: "translateY(-60px)",
+//     opacity: 1,
+//     filter: "blur(0px)",
+//     transition: enterTransition,
+//   },
+//   exit: {
+//     transform: "translateY(calc(100% + 0px))",
+//     opacity: 0,
+//     filter: "blur(4px)",
+//     transition: exitTransition,
+//   },
+// };
 const whitePanelVariants = {
-  initial: {
-    transform: "translateY(calc(100% + 0px))",
-    opacity: 0,
-    filter: "blur(4px)",
-  },
+  initial: { transform: "translateY(0%)", opacity: 1, filter: "blur(0px)" },
   animate: {
-    transform: "translateY(-60px)",
+    transform: "translateY(0%)",
     opacity: 1,
     filter: "blur(0px)",
-    transition: enterTransition,
+    transition: {
+      type: "spring" as const,
+      duration: 2.5,
+      bounce: 0.1,
+    },
   },
   exit: {
-    transform: "translateY(calc(100% + 0px))",
+    transform: "translateY(100%)",
     opacity: 0,
     filter: "blur(4px)",
     transition: exitTransition,
@@ -67,7 +86,7 @@ export function DepositFlow2(props: IProps) {
 
   const resetIdleTimer = useCallback(() => {
     if (idleTimer.current) clearTimeout(idleTimer.current);
-    idleTimer.current = setTimeout(() => setShowConfirm(true), 4000);
+    idleTimer.current = setTimeout(() => setShowConfirm(true), 2000);
   }, []);
 
   const handleClose = useCallback(() => {
@@ -161,7 +180,7 @@ export function DepositFlow2(props: IProps) {
           <motion.div
             className="w-full"
             onClick={(e) => e.stopPropagation()}
-            variants={panelVariants}
+            variants={whitePanelVariants}
             initial="initial"
             animate="animate"
             exit="exit"

@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, useId, Dispatch, SetStateAction } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Spinner } from "../ui/spinner";
 import Image from "next/image";
@@ -12,7 +12,7 @@ const TOP_CONCAVE = "path('M 0 80 L 300 80 L 300 20 Q 150 60 0 20 Z')";
 const USDC_IMAGE =
   "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png";
 
-function USDCBadge({ shimmer }: { shimmer: boolean }) {
+function USDCBadge({ shimmerKey }: { shimmerKey: number }) {
   return (
     <div
       className="relative flex items-center gap-1.5 overflow-hidden"
@@ -28,8 +28,9 @@ function USDCBadge({ shimmer }: { shimmer: boolean }) {
       }}
     >
       {/* One-shot shimmer sweep */}
-      {shimmer && (
+      {shimmerKey > 0 && (
         <motion.div
+          key={shimmerKey}
           className="absolute inset-0 pointer-events-none z-20"
           style={{
             background:
@@ -61,19 +62,41 @@ interface IConfirmContent {
   onDone?: () => void;
 }
 
+function playPulseSound() {
+  const audio = new Audio("/audio/pulse.mp3");
+  audio.volume = 0.35;
+  audio.play();
+}
+
 export function ConfirmContent(props: IConfirmContent) {
   const { done = false, setDone = () => {}, onDone } = props;
-  const [shimmer, setShimmer] = useState(false);
+  const [shimmerKey, setShimmerKey] = useState(0);
   const [expanding, setExpanding] = useState(false);
+  const [pulsing, setPulsing] = useState(false);
   // const [done, setDone] = useState(false);
 
   useEffect(() => {
     // 8 revolutions × 0.75s = 6s — shimmer fires 0.5s before expansion
-    const tShimmer = setTimeout(() => setShimmer(true), 5500);
+    const tShimmer = setTimeout(() => setShimmerKey((k) => k + 1), 5500);
     const tExpand = setTimeout(() => setExpanding(true), 6000);
+    // Pulse fires at scale peak (0.3s into the 0.6s scale anim)
+    const tPulse = setTimeout(() => {
+      setPulsing(true);
+      playPulseSound();
+    }, 6400);
+    // Done fires slightly after pulse starts, so icon swap overlaps
+    const tDone = setTimeout(() => {
+      setDone(true);
+      onDone?.();
+    }, 6450);
+    // Re-shimmer the badge after pulse sweeps past it
+    const tShimmer2 = setTimeout(() => setShimmerKey((k) => k + 1), 7950);
     return () => {
       clearTimeout(tShimmer);
       clearTimeout(tExpand);
+      clearTimeout(tPulse);
+      clearTimeout(tDone);
+      clearTimeout(tShimmer2);
     };
   }, []);
 
@@ -96,12 +119,6 @@ export function ConfirmContent(props: IConfirmContent) {
                   opacity: 0,
                   transition: { duration: 0.2, ease: "easeIn" },
                 }}
-                onAnimationComplete={() => {
-                  if (expanding) {
-                    setDone(true);
-                    onDone?.();
-                  }
-                }}
               >
                 <Spinner className="size-7" />
               </motion.div>
@@ -119,7 +136,7 @@ export function ConfirmContent(props: IConfirmContent) {
           </AnimatePresence>
 
           {/* Pulse wave 1 — green */}
-          {done && (
+          {pulsing && (
             <motion.div
               className="absolute rounded-full pointer-events-none"
               style={{
@@ -137,7 +154,7 @@ export function ConfirmContent(props: IConfirmContent) {
           )}
 
           {/* Pulse wave 2 — background colour, delayed */}
-          {done && (
+          {pulsing && (
             <motion.div
               className="absolute rounded-full pointer-events-none"
               style={{
@@ -184,7 +201,7 @@ export function ConfirmContent(props: IConfirmContent) {
           </motion.div>
         </div>
 
-        <USDCBadge shimmer={shimmer} />
+        <USDCBadge shimmerKey={shimmerKey} />
       </div>
 
       {/* Bottom section */}
@@ -283,34 +300,133 @@ interface IProps {
 
 export function Confirm(props: IProps) {
   const { handleClose } = props;
+  const clipId = useId();
+
+  // objectBoundingBox paths (coords 0-1 relative to element)
+  // Start: off-screen at bottom, convex arch (arches up)
+  const pathStart = "M 0 1.15 Q 0.5 1 1 1.15 L 1 1.15 L 0 1.15 Z";
+  // End: off-screen at top, concave dip
+  const pathEnd = "M 0 -0.15 Q 0.5 0 1 -0.15 L 1 1 L 0 1 Z";
+
+  // Stroke-only paths: just the top curve, no sides/bottom
+  const strokeStart = "M 0 1.15 Q 0.5 1 1 1.15";
+  const strokeEnd = "M 0 -0.15 Q 0.5 0 1 -0.15";
 
   const [done, setDone] = useState(false);
+
+  const easeFn2 = [0.76, 0, 0.04, 1] as any;
+
   return (
-    <motion.div className="h-101.5 max-w-75 w-full mx-auto flex shadow-[0_0_0_1px_rgba(90,90,90,0.25)] rounded-2xl overflow-hidden">
-      <motion.div
-        className="flex flex-col rounded-2xl bg-[linear-gradient(180deg,#d1d1d1_0%,#b3b3b3_100%)] h-full flex-1"
-        // style={{ height: 466, paddingTop: 0 }}
-        // initial={{ y: 0 }}
-        // animate={{ y: -60 }}
-        // exit={{ y: 0 }}
+    <motion.div className="h-102 max-w-75 w-full mx-auto flex  rounded-2xl relative overflow-hidden">
+      {/* Hidden SVG for clip-path definition */}
+      <svg width="0" height="0" style={{ position: "absolute" }}>
+        <defs>
+          <clipPath id={clipId} clipPathUnits="objectBoundingBox">
+            <motion.path
+              initial={{ d: pathStart }}
+              animate={{ d: pathEnd }}
+              transition={{
+                duration: 1.2,
+                ease: easeFn2,
+              }}
+            />
+          </clipPath>
+        </defs>
+      </svg>
+      {/* Visible stroke overlay */}
+      <svg
+        className="absolute inset-0 w-full h-full z-20 pointer-events-none"
+        viewBox="0 0 1 1"
+        preserveAspectRatio="none"
       >
-        <motion.div
-        // className="bg-[red]"
-        // style={{ height: 80, marginTop: -20 }}
-        // initial={{ clipPath: TOP_CONVEX, y: 0, opacity: 1 }}
-        // animate={{ clipPath: TOP_CONCAVE, y: 0, opacity: 1 }}
-        // exit={{ clipPath: TOP_CONVEX, y: 0, opacity: 1 }}
-        // transition={{ duration: 0.5 }}
-        ></motion.div>
+        <motion.path
+          initial={{ d: strokeStart }}
+          animate={{ d: strokeEnd }}
+          transition={{ duration: 1.2, ease: easeFn2 }}
+          fill="none"
+          stroke="#787879"
+          strokeWidth="6"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+      <motion.div
+        className="flex flex-col z-10 rounded-2xl bg-[linear-gradient(180deg,#d1d1d1_0%,#b3b3b3_100%)] h-full flex-1 relative"
+        style={{ clipPath: `url(#${clipId})` }}
+        animate={
+          done
+            ? {
+                boxShadow: [
+                  "inset 0 0 0px 0px rgba(76,175,130,0)",
+                  "inset 0 0 30px 8px rgba(76,175,130,0.45)",
+                  "inset 0 0 0px 0px rgba(76,175,130,0)",
+                ],
+              }
+            : {}
+        }
+        transition={{
+          duration: 3.5,
+          ease: [0.23, 1, 0.32, 1],
+          delay: 0.15,
+          times: [0, 0.15, 1],
+        }}
+      >
+        {/* Bottom-lingering glow overlay — masked so only bottom portion shows */}
+        <AnimatePresence>
+          {done && (
+            <motion.div
+              className="absolute inset-0 rounded-2xl pointer-events-none z-30"
+              style={{
+                boxShadow: "inset 0 0 30px 8px rgba(76,175,130,0.45)",
+                maskImage:
+                  "linear-gradient(to bottom, transparent 20%, black 70%)",
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, transparent 20%, black 70%)",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0, 1, 1, 0],
+              }}
+              transition={{
+                duration: 7.5,
+                ease: [0.23, 1, 0.32, 1],
+                delay: 0.15,
+                times: [0, 0.07, 0.55, 1],
+              }}
+            />
+          )}
+        </AnimatePresence>
+
         <div className="flex flex-1 flex-col gap-7.5 h-full px-4 pb-6 pt-3.5">
-          <motion.div className="flex items-center justify-center">
-            <p
-              className="text-[#1D1D1D] font-medium text-xs leading-4 tracking-[0.003em]"
-              onClick={handleClose}
-            >
-              {done ? "Deposit Successful" : "Deposit Processing"}
-            </p>
-          </motion.div>
+          <div
+            className="flex items-center justify-center"
+            onClick={handleClose}
+          >
+            <AnimatePresence mode="wait">
+              {done ? (
+                <motion.p
+                  key="header-done"
+                  className="text-[#1D1D1D] font-medium text-xs leading-4 tracking-[0.003em]"
+                  initial={{ opacity: 0, filter: "blur(6px)" }}
+                  animate={{ opacity: 1, filter: "blur(0px)" }}
+                  transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+                >
+                  Deposit Successful
+                </motion.p>
+              ) : (
+                <motion.p
+                  key="header-pending"
+                  className="text-[#1D1D1D] font-medium text-xs leading-4 tracking-[0.003em]"
+                  exit={{
+                    opacity: 0,
+                    filter: "blur(6px)",
+                    transition: { duration: 0.2, ease: "easeIn" },
+                  }}
+                >
+                  Deposit Processing
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
           <ConfirmContent done={done} setDone={setDone} />
         </div>
       </motion.div>
