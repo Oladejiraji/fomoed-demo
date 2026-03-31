@@ -10,6 +10,8 @@ import {
 } from "recharts";
 import { cn } from "@/lib/utils";
 import { DataPoint } from ".";
+import { useAtomValue } from "jotai";
+import { isAnimationActiveAtom } from "@/lib/atoms/widget";
 
 interface IProps {
   data: DataPoint[];
@@ -24,10 +26,11 @@ interface ISmallChart {
 
 function SmallChart(props: ISmallChart) {
   const { data } = props;
+  const isAnimationActive = useAtomValue(isAnimationActiveAtom);
 
   return (
     <div className="flex-1 w-full h-full">
-      <ResponsiveContainer width="100%" height="100%" minHeight={80}>
+      <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={data}
           margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
@@ -50,8 +53,9 @@ function SmallChart(props: ISmallChart) {
             dataKey="price"
             stroke="#4CAF82"
             fill="#4CAF8218"
-            isAnimationActive={false}
+            isAnimationActive={isAnimationActive}
             strokeWidth={1.5}
+            animationDuration={1000}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -69,7 +73,7 @@ export function Small(props: IProps) {
         isActive ? "flex" : "hidden",
       )}
     >
-      <div className="p-3">
+      <div className="p-3 h-16">
         <Price price={latestPrice} priceChange={pctChange} />
       </div>
       <SmallChart data={data} />

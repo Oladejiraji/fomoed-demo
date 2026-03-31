@@ -12,6 +12,8 @@ import {
 } from "recharts";
 import { Price } from "./price";
 import { DataPoint } from ".";
+import { isAnimationActiveAtom } from "@/lib/atoms/widget";
+import { useAtomValue } from "jotai";
 
 interface IMediumChart {
   data: DataPoint[];
@@ -54,6 +56,7 @@ function Time() {
 
 function MediumChart(props: IMediumChart) {
   const { data } = props;
+  const isAnimationActive = useAtomValue(isAnimationActiveAtom);
 
   return (
     <div className="flex-1 w-full h-full">
@@ -81,8 +84,9 @@ function MediumChart(props: IMediumChart) {
             dataKey="price"
             stroke="#4CAF82"
             fill="#4CAF8218"
-            isAnimationActive={false}
+            isAnimationActive={isAnimationActive}
             strokeWidth={1.5}
+            animationDuration={1000}
           />
         </AreaChart>
       </ResponsiveContainer>

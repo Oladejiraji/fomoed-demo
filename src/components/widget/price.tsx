@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface IProps {
   price?: number;
@@ -7,10 +7,18 @@ interface IProps {
 
 export function Price(props: IProps) {
   const { price, priceChange = 0 } = props;
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsLoaded(true), 500);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const isPositive = priceChange >= 0;
   const symbol = isPositive ? "+" : "";
   const priceChangeString = `${symbol}${priceChange.toFixed(2)}%`;
+
+  if (!isLoaded) return null;
 
   return (
     <div className="flex flex-col gap-2 items-start">
