@@ -117,7 +117,7 @@ export function BackArrowIcon() {
   );
 }
 
-export function CaretDown() {
+export function CaretDown({ className }: { className?: string }) {
   return (
     <svg
       width="12"
@@ -125,6 +125,7 @@ export function CaretDown() {
       viewBox="0 0 12 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         d="M2.39844 4.20312L5.99844 7.80312L9.59844 4.20312"
@@ -235,5 +236,48 @@ export const ArrowDownIcon = () => (
       strokeWidth="1.5"
       d="m.75.75 3.6 3.6 3.6-3.6"
     ></path>
+  </svg>
+);
+
+export const SkipIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="7"
+    fill="none"
+    viewBox="0 0 14 7"
+    className={className}
+  >
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.6"
+      d="M0 6.065V.677Q0 .368.204.184A.69.69 0 0 1 .679 0q.094 0 .173.031.077.032.174.086L5.259 2.81q.15.105.222.246a.7.7 0 0 1 .072.314.7.7 0 0 1-.072.314.7.7 0 0 1-.222.248L1.026 6.623a2 2 0 0 1-.174.086.5.5 0 0 1-.173.031.7.7 0 0 1-.475-.184A.63.63 0 0 1 0 6.065m7.535 0V.677q0-.309.204-.493A.69.69 0 0 1 8.214 0q.095 0 .173.031.078.032.174.086l4.234 2.692q.15.105.222.246a.7.7 0 0 1 .07.314.7.7 0 0 1-.07.314.7.7 0 0 1-.222.248L8.56 6.623a2 2 0 0 1-.174.086.5.5 0 0 1-.173.031.69.69 0 0 1-.475-.184.63.63 0 0 1-.204-.491"
+    ></path>
+  </svg>
+);
+
+export const FolderIcon = ({ open }: { open?: boolean }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    fill="none"
+    viewBox="0 -2 14 14"
+  >
+    {/* Lid */}
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.7"
+      d="M2.546 0a.667.667 0 1 0 0 1.333h8a.667.667 0 0 0 0-1.333z"
+      className={`transition-transform duration-200 ${open ? "-translate-y-0.5" : ""}`}
+    />
+    {/* Body */}
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.7"
+      fillRule="evenodd"
+      d="M1.333 2A1.333 1.333 0 0 0 .018 3.553l1.11 6.666a1.33 1.33 0 0 0 1.316 1.114h8.204a1.33 1.33 0 0 0 1.316-1.114l1.11-6.666A1.334 1.334 0 0 0 11.76 2zm0 1.333h10.426L10.65 10H2.443z"
+      clipRule="evenodd"
+    />
   </svg>
 );

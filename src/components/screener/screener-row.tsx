@@ -215,7 +215,7 @@ export const TokenRow = forwardRef<
 
       {/* Actions revealed underneath */}
       <motion.div
-        className="absolute inset-y-0 left-0"
+        className="absolute top-0 bottom-px left-0"
         style={{ width: useTransform(x, (v) => Math.max(ACTIONS_WIDTH, v)) }}
       >
         <ActionButton
@@ -307,11 +307,17 @@ export const TokenRow = forwardRef<
             <span className="text-sm tabular-nums text-neutral-300">
               {token.marketCap}
             </span>
-            {token.marketCapChange && (
-              <span className="rounded-md bg-green-400/12 px-1.5 py-0.5 text-xs tabular-nums text-green-400">
-                {token.marketCapChange}
-              </span>
-            )}
+            <span
+              className={`rounded-md px-1.5 py-0.5 text-xs tabular-nums ${
+                !token.marketCapChange
+                  ? "invisible"
+                  : token.marketCapChange.startsWith("-")
+                    ? "bg-red-400/10 text-red-400"
+                    : "bg-green-400/12 text-green-400"
+              }`}
+            >
+              {token.marketCapChange ?? "+0.00%"}
+            </span>
           </div>
         )}
 

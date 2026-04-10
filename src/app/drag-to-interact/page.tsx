@@ -3,6 +3,7 @@
 import FloatingControls from "@/components/screener/floating-controls";
 import { TokenRow } from "@/components/screener/screener-row";
 import { useRef, useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 import { AnimatePresence } from "motion/react";
 
 export interface TokenRowHandle {
@@ -49,14 +50,14 @@ const tokens: ScreenerToken[] = [
   },
   {
     id: 3,
-    symbol: "Chain",
+    symbol: "Chainlink",
     logo: "/images/tokens/chain.svg",
     price: "$10.80",
     change: "-$0.34",
     changePct: "-3.21%",
     volume: "11.20B",
     marketCap: "$94.3B",
-    marketCapChange: null,
+    marketCapChange: "-8.40%",
     volatility: null,
   },
 ];
@@ -78,19 +79,10 @@ const columns = [
 
 export default function DragToInteractPage() {
   const [draggingId, setDraggingId] = useState<number | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   const [activeNewsSymbol, setActiveNewsSymbol] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<Record<number, TokenRowHandle | null>>({});
-
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 640);
-    function handleResize() {
-      setIsMobile(window.innerWidth < 640);
-    }
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     function handlePointerDown(e: PointerEvent) {
@@ -107,11 +99,11 @@ export default function DragToInteractPage() {
 
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center bg-black font-sans text-white antialiased">
+      <div className="flex min-h-screen items-center justify-center bg-[#09090A] font-sans text-white antialiased">
         <div className="w-170 select-none py-1.5">
           {/* Header */}
           <div
-            className="mb-2 flex h-12 w-full items-center rounded-t-2xl px-4"
+            className="mb-0 flex h-12 w-full items-center rounded-t-2xl px-4"
             style={{
               background: "rgba(18,18,18,0.5)",
               boxShadow: "0 0 0 1px rgba(38,38,38,0.5)",
@@ -148,7 +140,7 @@ export default function DragToInteractPage() {
           </div>
 
           {/* Rows */}
-          <div ref={containerRef} className="flex flex-col gap-2">
+          <div ref={containerRef} className="flex flex-col gap-0">
             {tokens.map((token) => (
               <TokenRow
                 key={token.id}
