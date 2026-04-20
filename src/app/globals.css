@@ -181,6 +181,24 @@ body {
   }
 }
 
+@keyframes wave-slide {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-66.6667% + 2px), 0, 0);
+  }
+}
+
+.animate-wave-slide {
+  animation: wave-slide 24s linear infinite;
+  will-change: transform;
+}
+
+.wave-paused {
+  animation-play-state: paused;
+}
+
 .scrollbar-minimal {
   scrollbar-width: thin;
   scrollbar-color: rgba(249, 249, 249, 0.04) transparent;

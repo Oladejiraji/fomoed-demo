@@ -281,3 +281,180 @@ export const FolderIcon = ({ open }: { open?: boolean }) => (
     />
   </svg>
 );
+
+export const QuestionIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="13"
+    height="13"
+    fill="none"
+    viewBox="0 0 13 13"
+  >
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.3"
+      d="M6.326 10.077q.285 0 .482-.197a.66.66 0 0 0 .197-.483.66.66 0 0 0-.197-.482.66.66 0 0 0-.483-.197.66.66 0 0 0-.482.197.66.66 0 0 0-.197.483q0 .285.197.482a.66.66 0 0 0 .483.197m.009 2.59a6.2 6.2 0 0 1-2.47-.499 6.4 6.4 0 0 1-2.012-1.353A6.4 6.4 0 0 1 .499 8.804 6.2 6.2 0 0 1 0 6.334q0-1.313.499-2.47a6.4 6.4 0 0 1 1.353-2.011A6.4 6.4 0 0 1 3.862.499 6.2 6.2 0 0 1 6.333 0q1.314 0 2.47.499 1.157.498 2.012 1.353t1.354 2.01q.498 1.156.499 2.47 0 1.314-.499 2.47a6.4 6.4 0 0 1-1.353 2.012 6.4 6.4 0 0 1-2.011 1.354 6.2 6.2 0 0 1-2.47.499m-.002-1q2.234 0 3.784-1.55t1.55-3.784-1.55-3.783T6.333 1 2.55 2.55 1 6.333t1.55 3.784 3.783 1.55m.054-8.187q.462 0 .799.29a.92.92 0 0 1 .337.726q0 .367-.215.656a3.7 3.7 0 0 1-.493.54q-.363.322-.639.709a1.56 1.56 0 0 0-.295.86.38.38 0 0 0 .128.306q.135.123.314.123a.45.45 0 0 0 .326-.129.6.6 0 0 0 .17-.314q.068-.343.284-.612.217-.27.471-.51.365-.356.636-.775.272-.42.272-.936 0-.792-.624-1.302a2.24 2.24 0 0 0-1.458-.51q-.595 0-1.122.264a1.92 1.92 0 0 0-.82.769.46.46 0 0 0-.059.326q.032.172.176.26a.52.52 0 0 0 .375.058.56.56 0 0 0 .327-.219q.202-.262.49-.421.288-.16.62-.16"
+    ></path>
+  </svg>
+);
+
+export const ThreeDotsIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="10"
+    height="3"
+    fill="none"
+    viewBox="0 0 10 3"
+  >
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.3"
+      d="M1.197 2.4Q.7 2.4.35 2.047a1.17 1.17 0 0 1-.35-.85Q0 .7.354.35.706 0 1.204 0 1.7 0 2.05.354q.35.353.35.85 0 .496-.353.846-.355.35-.85.35m3.6 0q-.498 0-.847-.353a1.17 1.17 0 0 1-.35-.85Q3.6.7 3.953.35q.354-.35.85-.35.498 0 .847.354.35.353.35.85 0 .496-.354.846-.352.35-.85.35m3.6 0q-.498 0-.847-.353a1.17 1.17 0 0 1-.35-.85Q7.2.7 7.553.35q.354-.35.85-.35.498 0 .847.354.35.353.35.85 0 .496-.354.846-.353.35-.85.35"
+    ></path>
+  </svg>
+);
+
+type WaveProps = React.SVGProps<SVGSVGElement> & {
+  variant?: "regular" | "active";
+};
+
+export const BtcWave = ({ variant = "regular", ...props }: WaveProps) => {
+  const d =
+    "M104.466 1.119-23 22.656V221H739V86.138c0-37.18-25.614-69.458-61.822-77.907l-20.335-4.745a80 80 0 0 0-44.947 2.519l-23.11 8.205a80 80 0 0 1-48.112 1.712L498.829 4.338a80 80 0 0 0-44.505.526l-35.942 10.871a80 80 0 0 1-45.81.153L333.024 4.215a80 80 0 0 0-41.332-1.06l-61.089 14.673a80 80 0 0 1-40.028-.688L139.138 2.9a80 80 0 0 0-34.672-1.781";
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="687"
+      height="221"
+      fill="none"
+      viewBox="0 0 687 221"
+      {...props}
+    >
+      {variant === "regular" ? (
+        <g opacity="0.16">
+          <path fill="url(#paint0_linear_8416_16075)" d={d}></path>
+        </g>
+      ) : (
+        <path fill="url(#paint_linear_btc_active)" d={d}></path>
+      )}
+      <defs>
+        {variant === "regular" ? (
+          <linearGradient
+            id="paint0_linear_8416_16075"
+            x1="373"
+            x2="373"
+            y1="-1.844"
+            y2="220.156"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopOpacity="0.2"></stop>
+            <stop offset="0.731" stopColor="#262626"></stop>
+          </linearGradient>
+        ) : (
+          <linearGradient
+            id="paint_linear_btc_active"
+            x1="343.5"
+            x2="344.4"
+            y1="0.8"
+            y2="134.9"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#F7931A"></stop>
+            <stop offset="1" stopColor="#FF5A00"></stop>
+          </linearGradient>
+        )}
+      </defs>
+    </svg>
+  );
+};
+
+export const EthWave = ({ variant = "regular", ...props }: WaveProps) => {
+  const d =
+    "M104.466 1.119-23 22.656V156H739V86.138c0-37.18-25.614-69.458-61.822-77.907l-20.335-4.745a80 80 0 0 0-44.947 2.519l-23.11 8.205a80 80 0 0 1-48.112 1.712L498.829 4.338a80 80 0 0 0-44.505.526l-35.942 10.871a80 80 0 0 1-45.81.153L333.024 4.215a80 80 0 0 0-41.332-1.06l-61.089 14.673a80 80 0 0 1-40.028-.688L139.138 2.9a80 80 0 0 0-34.672-1.781";
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="687"
+      height="156"
+      fill="none"
+      viewBox="0 0 687 156"
+      {...props}
+    >
+      {variant === "regular" ? (
+        <g opacity="0.16">
+          <path fill="url(#paint0_linear_8416_16073)" d={d}></path>
+        </g>
+      ) : (
+        <path fill="url(#paint_linear_eth_active)" d={d}></path>
+      )}
+      <defs>
+        {variant === "regular" ? (
+          <linearGradient
+            id="paint0_linear_8416_16073"
+            x1="373"
+            x2="373"
+            y1="-1.844"
+            y2="220.156"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopOpacity="0.2"></stop>
+            <stop offset="0.731" stopColor="#262626"></stop>
+          </linearGradient>
+        ) : (
+          <linearGradient
+            id="paint_linear_eth_active"
+            x1="0"
+            x2="0"
+            y1="-23.88"
+            y2="70.76"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#C0CBF6"></stop>
+            <stop offset="1" stopColor="#31479E"></stop>
+          </linearGradient>
+        )}
+      </defs>
+    </svg>
+  );
+};
+
+export const OthersWave = ({ variant = "regular", ...props }: WaveProps) => {
+  const d =
+    "M93.507 2.025-23 21.711V71H739V85.193c0-37.18-25.614-69.459-61.822-77.907L656.843 2.54a80 80 0 0 0-44.947 2.519l-23.11 8.205a80 80 0 0 1-48.112 1.711L498.829 3.393a80 80 0 0 0-44.505.527l-35.942 10.87a80 80 0 0 1-45.81.154L333.024 3.27a80 80 0 0 0-41.332-1.06l-61.089 14.673a80 80 0 0 1-40.028-.687L149.85 4.92a130 130 0 0 0-56.343-2.896";
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="687"
+      height="71"
+      fill="none"
+      viewBox="0 0 687 71"
+      {...props}
+    >
+      {variant === "regular" ? (
+        <g opacity="0.16">
+          <path fill="url(#paint0_linear_8416_16071)" d={d}></path>
+        </g>
+      ) : (
+        <path fill="url(#paint0_linear_8416_16071)" d={d}></path>
+      )}
+      <defs>
+        <linearGradient
+          id="paint0_linear_8416_16071"
+          x1="-146.5"
+          x2="697"
+          y1="108.211"
+          y2="108.211"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#E6B875"></stop>
+          <stop offset="0.167" stopColor="#EDC066"></stop>
+          <stop offset="0.33" stopColor="#84CDA9"></stop>
+          <stop offset="0.53" stopColor="#6ECCD1"></stop>
+          <stop offset="0.667" stopColor="#5FC4DC"></stop>
+          <stop offset="0.83" stopColor="#427581"></stop>
+          <stop offset="1" stopColor="#9CAAFD"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
