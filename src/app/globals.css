@@ -51,6 +51,7 @@
 html,
 body {
   overscroll-behavior: none;
+  box-sizing: border-box;
 }
 
 body {
@@ -136,4 +137,82 @@ body {
   html {
     @apply font-sans;
   }
+}
+
+@property --glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.folder-glow {
+  overflow: hidden;
+}
+
+.folder-glow::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -2px;
+  border: solid 3px;
+  border-image: conic-gradient(
+      from var(--glow-angle),
+      #669900,
+      #99cc33,
+      #ccee66,
+      #006699,
+      #3399cc,
+      #990066,
+      #cc3399,
+      #ff6600,
+      #ff9900,
+      #ffcc00,
+      #669900
+    )
+    1;
+  filter: blur(5px);
+  animation: glow-spin 4s linear infinite;
+  border-radius: inherit;
+}
+
+@keyframes glow-spin {
+  to {
+    --glow-angle: 1turn;
+  }
+}
+
+@keyframes wave-slide {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-66.6667% + 2px), 0, 0);
+  }
+}
+
+.animate-wave-slide {
+  animation: wave-slide 24s linear infinite;
+  will-change: transform;
+}
+
+.wave-paused {
+  animation-play-state: paused;
+}
+
+.scrollbar-minimal {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(249, 249, 249, 0.04) transparent;
+}
+
+.scrollbar-minimal::-webkit-scrollbar {
+  width: 3px;
+}
+
+.scrollbar-minimal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-minimal::-webkit-scrollbar-thumb {
+  background: rgba(249, 249, 249, 0.04);
+  border-radius: 999px;
 }

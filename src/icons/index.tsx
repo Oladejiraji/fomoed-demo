@@ -1,3 +1,5 @@
+import { expo } from "maath/dist/declarations/src/easing";
+
 export const PlusIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +98,7 @@ export function CloseIcon() {
   );
 }
 
-export function CaretDown() {
+export function BackArrowIcon() {
   return (
     <svg
       width="12"
@@ -104,6 +106,28 @@ export function CaretDown() {
       viewBox="0 0 12 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.80156 2.40156L4.20156 6.00156L7.80156 9.60156"
+        stroke="#1D1D1D"
+        strokeOpacity="0.6"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function CaretDown({ className }: { className?: string }) {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         d="M2.39844 4.20312L5.99844 7.80312L9.59844 4.20312"
@@ -216,3 +240,441 @@ export const ArrowDownIcon = () => (
     ></path>
   </svg>
 );
+
+export const SkipIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="7"
+    fill="none"
+    viewBox="0 0 14 7"
+    className={className}
+  >
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.6"
+      d="M0 6.065V.677Q0 .368.204.184A.69.69 0 0 1 .679 0q.094 0 .173.031.077.032.174.086L5.259 2.81q.15.105.222.246a.7.7 0 0 1 .072.314.7.7 0 0 1-.072.314.7.7 0 0 1-.222.248L1.026 6.623a2 2 0 0 1-.174.086.5.5 0 0 1-.173.031.7.7 0 0 1-.475-.184A.63.63 0 0 1 0 6.065m7.535 0V.677q0-.309.204-.493A.69.69 0 0 1 8.214 0q.095 0 .173.031.078.032.174.086l4.234 2.692q.15.105.222.246a.7.7 0 0 1 .07.314.7.7 0 0 1-.07.314.7.7 0 0 1-.222.248L8.56 6.623a2 2 0 0 1-.174.086.5.5 0 0 1-.173.031.69.69 0 0 1-.475-.184.63.63 0 0 1-.204-.491"
+    ></path>
+  </svg>
+);
+
+export const FolderIcon = ({ open }: { open?: boolean }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    fill="none"
+    viewBox="0 -2 14 14"
+  >
+    {/* Lid */}
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.7"
+      d="M2.546 0a.667.667 0 1 0 0 1.333h8a.667.667 0 0 0 0-1.333z"
+      className={`transition-transform duration-200 ${open ? "-translate-y-0.5" : ""}`}
+    />
+    {/* Body */}
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.7"
+      fillRule="evenodd"
+      d="M1.333 2A1.333 1.333 0 0 0 .018 3.553l1.11 6.666a1.33 1.33 0 0 0 1.316 1.114h8.204a1.33 1.33 0 0 0 1.316-1.114l1.11-6.666A1.334 1.334 0 0 0 11.76 2zm0 1.333h10.426L10.65 10H2.443z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+export const QuestionIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="13"
+    height="13"
+    fill="none"
+    viewBox="0 0 13 13"
+  >
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.3"
+      d="M6.326 10.077q.285 0 .482-.197a.66.66 0 0 0 .197-.483.66.66 0 0 0-.197-.482.66.66 0 0 0-.483-.197.66.66 0 0 0-.482.197.66.66 0 0 0-.197.483q0 .285.197.482a.66.66 0 0 0 .483.197m.009 2.59a6.2 6.2 0 0 1-2.47-.499 6.4 6.4 0 0 1-2.012-1.353A6.4 6.4 0 0 1 .499 8.804 6.2 6.2 0 0 1 0 6.334q0-1.313.499-2.47a6.4 6.4 0 0 1 1.353-2.011A6.4 6.4 0 0 1 3.862.499 6.2 6.2 0 0 1 6.333 0q1.314 0 2.47.499 1.157.498 2.012 1.353t1.354 2.01q.498 1.156.499 2.47 0 1.314-.499 2.47a6.4 6.4 0 0 1-1.353 2.012 6.4 6.4 0 0 1-2.011 1.354 6.2 6.2 0 0 1-2.47.499m-.002-1q2.234 0 3.784-1.55t1.55-3.784-1.55-3.783T6.333 1 2.55 2.55 1 6.333t1.55 3.784 3.783 1.55m.054-8.187q.462 0 .799.29a.92.92 0 0 1 .337.726q0 .367-.215.656a3.7 3.7 0 0 1-.493.54q-.363.322-.639.709a1.56 1.56 0 0 0-.295.86.38.38 0 0 0 .128.306q.135.123.314.123a.45.45 0 0 0 .326-.129.6.6 0 0 0 .17-.314q.068-.343.284-.612.217-.27.471-.51.365-.356.636-.775.272-.42.272-.936 0-.792-.624-1.302a2.24 2.24 0 0 0-1.458-.51q-.595 0-1.122.264a1.92 1.92 0 0 0-.82.769.46.46 0 0 0-.059.326q.032.172.176.26a.52.52 0 0 0 .375.058.56.56 0 0 0 .327-.219q.202-.262.49-.421.288-.16.62-.16"
+    ></path>
+  </svg>
+);
+
+export const ThreeDotsIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="10"
+    height="3"
+    fill="none"
+    viewBox="0 0 10 3"
+  >
+    <path
+      fill="#F9F9F9"
+      fillOpacity="0.3"
+      d="M1.197 2.4Q.7 2.4.35 2.047a1.17 1.17 0 0 1-.35-.85Q0 .7.354.35.706 0 1.204 0 1.7 0 2.05.354q.35.353.35.85 0 .496-.353.846-.355.35-.85.35m3.6 0q-.498 0-.847-.353a1.17 1.17 0 0 1-.35-.85Q3.6.7 3.953.35q.354-.35.85-.35.498 0 .847.354.35.353.35.85 0 .496-.354.846-.352.35-.85.35m3.6 0q-.498 0-.847-.353a1.17 1.17 0 0 1-.35-.85Q7.2.7 7.553.35q.354-.35.85-.35.498 0 .847.354.35.353.35.85 0 .496-.354.846-.353.35-.85.35"
+    ></path>
+  </svg>
+);
+
+type WaveProps = React.SVGProps<SVGSVGElement> & {
+  variant?: "regular" | "active";
+};
+
+export const BtcWave = ({ variant = "regular", ...props }: WaveProps) => {
+  const d =
+    "M104.466 1.119-23 22.656V221H739V86.138c0-37.18-25.614-69.458-61.822-77.907l-20.335-4.745a80 80 0 0 0-44.947 2.519l-23.11 8.205a80 80 0 0 1-48.112 1.712L498.829 4.338a80 80 0 0 0-44.505.526l-35.942 10.871a80 80 0 0 1-45.81.153L333.024 4.215a80 80 0 0 0-41.332-1.06l-61.089 14.673a80 80 0 0 1-40.028-.688L139.138 2.9a80 80 0 0 0-34.672-1.781";
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="687"
+      height="221"
+      fill="none"
+      viewBox="0 0 687 221"
+      {...props}
+    >
+      {variant === "regular" ? (
+        <g opacity="0.16">
+          <path fill="url(#paint0_linear_8416_16075)" d={d}></path>
+        </g>
+      ) : (
+        <path fill="url(#paint_linear_btc_active)" d={d}></path>
+      )}
+      <defs>
+        {variant === "regular" ? (
+          <linearGradient
+            id="paint0_linear_8416_16075"
+            x1="373"
+            x2="373"
+            y1="-1.844"
+            y2="220.156"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopOpacity="0.2"></stop>
+            <stop offset="0.731" stopColor="#262626"></stop>
+          </linearGradient>
+        ) : (
+          <linearGradient
+            id="paint_linear_btc_active"
+            x1="343.5"
+            x2="344.4"
+            y1="0.8"
+            y2="134.9"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#F7931A"></stop>
+            <stop offset="1" stopColor="#FF5A00"></stop>
+          </linearGradient>
+        )}
+      </defs>
+    </svg>
+  );
+};
+
+export const EthWave = ({ variant = "regular", ...props }: WaveProps) => {
+  const d =
+    "M104.466 1.119-23 22.656V156H739V86.138c0-37.18-25.614-69.458-61.822-77.907l-20.335-4.745a80 80 0 0 0-44.947 2.519l-23.11 8.205a80 80 0 0 1-48.112 1.712L498.829 4.338a80 80 0 0 0-44.505.526l-35.942 10.871a80 80 0 0 1-45.81.153L333.024 4.215a80 80 0 0 0-41.332-1.06l-61.089 14.673a80 80 0 0 1-40.028-.688L139.138 2.9a80 80 0 0 0-34.672-1.781";
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="687"
+      height="156"
+      fill="none"
+      viewBox="0 0 687 156"
+      {...props}
+    >
+      {variant === "regular" ? (
+        <g opacity="0.16">
+          <path fill="url(#paint0_linear_8416_16073)" d={d}></path>
+        </g>
+      ) : (
+        <path fill="url(#paint_linear_eth_active)" d={d}></path>
+      )}
+      <defs>
+        {variant === "regular" ? (
+          <linearGradient
+            id="paint0_linear_8416_16073"
+            x1="373"
+            x2="373"
+            y1="-1.844"
+            y2="220.156"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopOpacity="0.2"></stop>
+            <stop offset="0.731" stopColor="#262626"></stop>
+          </linearGradient>
+        ) : (
+          <linearGradient
+            id="paint_linear_eth_active"
+            x1="0"
+            x2="0"
+            y1="-23.88"
+            y2="70.76"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#C0CBF6"></stop>
+            <stop offset="1" stopColor="#31479E"></stop>
+          </linearGradient>
+        )}
+      </defs>
+    </svg>
+  );
+};
+
+export const OthersWave = ({ variant = "regular", ...props }: WaveProps) => {
+  const d =
+    "M93.507 2.025-23 21.711V71H739V85.193c0-37.18-25.614-69.459-61.822-77.907L656.843 2.54a80 80 0 0 0-44.947 2.519l-23.11 8.205a80 80 0 0 1-48.112 1.711L498.829 3.393a80 80 0 0 0-44.505.527l-35.942 10.87a80 80 0 0 1-45.81.154L333.024 3.27a80 80 0 0 0-41.332-1.06l-61.089 14.673a80 80 0 0 1-40.028-.687L149.85 4.92a130 130 0 0 0-56.343-2.896";
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="687"
+      height="71"
+      fill="none"
+      viewBox="0 0 687 71"
+      {...props}
+    >
+      {variant === "regular" ? (
+        <g opacity="0.16">
+          <path fill="url(#paint0_linear_8416_16071)" d={d}></path>
+        </g>
+      ) : (
+        <path fill="url(#paint0_linear_8416_16071)" d={d}></path>
+      )}
+      <defs>
+        <linearGradient
+          id="paint0_linear_8416_16071"
+          x1="-146.5"
+          x2="697"
+          y1="108.211"
+          y2="108.211"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#E6B875"></stop>
+          <stop offset="0.167" stopColor="#EDC066"></stop>
+          <stop offset="0.33" stopColor="#84CDA9"></stop>
+          <stop offset="0.53" stopColor="#6ECCD1"></stop>
+          <stop offset="0.667" stopColor="#5FC4DC"></stop>
+          <stop offset="0.83" stopColor="#427581"></stop>
+          <stop offset="1" stopColor="#9CAAFD"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
+
+export function Fomoed() {
+  return (
+    <svg
+      width="6"
+      height="12"
+      viewBox="0 0 6 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1.58824 12V5.98305H0V4.55932L2.34706 4.67797V4.37288C2.01765 4.27119 1.74118 4.12429 1.51765 3.9322C1.30588 3.72881 1.14706 3.49717 1.04118 3.23729C0.935294 2.9661 0.882353 2.67797 0.882353 2.37288C0.882353 1.8983 0.994118 1.48588 1.21765 1.13559C1.45294 0.774011 1.78235 0.497174 2.20588 0.305084C2.64118 0.101695 3.15294 0 3.74118 0C4.21176 0 4.64118 0.0621468 5.02941 0.18644C5.42941 0.299435 5.75294 0.451977 6 0.644068L5.80588 2.33898C5.55882 2.14689 5.27059 1.9887 4.94118 1.86441C4.62353 1.74011 4.30588 1.67797 3.98823 1.67797C3.6 1.67797 3.28235 1.79096 3.03529 2.01695C2.8 2.23164 2.68235 2.57062 2.68235 3.0339C2.68235 3.31638 2.72941 3.55367 2.82353 3.74576C2.92941 3.93785 3.05294 4.09604 3.19412 4.22034C3.34706 4.33333 3.5 4.42373 3.65294 4.49152H5.87647L5.85882 5.98305H3.45882V12H1.58824Z"
+        fill="#F9F9F9"
+      />
+    </svg>
+  );
+}
+
+export function Home() {
+  return (
+    <svg
+      width="12"
+      height="13"
+      viewBox="0 0 12 13"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11 5.49495V11.0583H12V5.49495H11ZM1 11.0583V5.49495H0V11.0583H1ZM1.28324 4.86898L5.44993 1.20737L4.7898 0.4562L0.62312 4.11781L1.28324 4.86898ZM6.55007 1.20737L10.7167 4.86898L11.3769 4.11781L7.2102 0.4562L6.55007 1.20737ZM5.83333 9.22498H6.16667V8.22498H5.83333V9.22498ZM7 10.0583V11.725H8V10.0583H7ZM5 11.725V10.0583H4V11.725H5ZM3.83333 11.8916H1.83333V12.8916H3.83333V11.8916ZM8.16667 12.8916H10.1667V11.8916H8.16667V12.8916ZM4 11.725C4 11.817 3.92538 11.8916 3.83333 11.8916V12.8916C4.47767 12.8916 5 12.3693 5 11.725H4ZM7 11.725C7 12.3693 7.52233 12.8916 8.16667 12.8916V11.8916C8.0746 11.8916 8 11.817 8 11.725H7ZM6.16667 9.22498C6.62693 9.22498 7 9.59805 7 10.0583H8C8 9.04578 7.1792 8.22498 6.16667 8.22498V9.22498ZM5.83333 8.22498C4.8208 8.22498 4 9.04578 4 10.0583H5C5 9.59805 5.37307 9.22498 5.83333 9.22498V8.22498ZM5.44993 1.20737C5.76453 0.93088 6.23547 0.93088 6.55007 1.20737L7.2102 0.4562C6.51807 -0.152067 5.48193 -0.152067 4.7898 0.4562L5.44993 1.20737ZM0 11.0583C0 12.0708 0.820813 12.8916 1.83333 12.8916V11.8916C1.37309 11.8916 1 11.5186 1 11.0583H0ZM11 11.0583C11 11.5186 10.6269 11.8916 10.1667 11.8916V12.8916C11.1792 12.8916 12 12.0708 12 11.0583H11ZM12 5.49495C12 4.96765 11.7729 4.46589 11.3769 4.11781L10.7167 4.86898C10.8968 5.02719 11 5.25527 11 5.49495H12ZM1 5.49495C1 5.25527 1.1032 5.02719 1.28324 4.86898L0.62312 4.11781C0.22704 4.46589 0 4.96765 0 5.49495H1Z"
+        fill="#F9F9F9"
+      />
+    </svg>
+  );
+}
+
+export function Search() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.20078 11.5969C9.63083 11.5969 11.6008 9.62693 11.6008 7.19688C11.6008 4.76682 9.63083 2.79688 7.20078 2.79688C4.77073 2.79688 2.80078 4.76682 2.80078 7.19688C2.80078 9.62693 4.77073 11.5969 7.20078 11.5969Z"
+        stroke="#808080"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M10.8008 10.7969L13.6008 13.5969"
+        stroke="#808080"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function Settings() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#clip0_8401_14871)">
+        <path
+          d="M13.5 7.99999C13.5 9.00192 13.2321 9.94132 12.764 10.7504C12.2811 11.5851 11.5851 12.281 10.7505 12.7639C9.9414 13.2321 9.002 13.5 8 13.5C6.998 13.5 6.05863 13.2321 5.24955 12.7639C4.41492 12.2811 3.71898 11.5851 3.23607 10.7505C2.76793 9.94139 2.5 9.00199 2.5 7.99999C2.5 6.99799 2.76796 6.05855 3.23612 5.24945C3.71903 4.41487 4.41495 3.71895 5.24954 3.23607C6.05862 2.76793 6.998 2.5 8 2.5C9.002 2.5 9.9414 2.76793 10.7505 3.23607C11.5851 3.71897 12.281 4.41492 12.7639 5.24954C13.2321 6.05862 13.5 6.99799 13.5 7.99999Z"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M9.5 7.99999C9.5 8.82845 8.8284 9.49999 8 9.49999C7.72673 9.49999 7.47053 9.42692 7.24987 9.29925C6.8016 9.03985 6.5 8.55519 6.5 7.99999C6.5 7.44485 6.8016 6.96012 7.24987 6.70072C7.47053 6.57307 7.72673 6.5 8 6.5C8.8284 6.5 9.5 7.17159 9.5 7.99999Z"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M8 13.5V14.8335"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M2.50131 8H1.16797"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M8 2.49727V1.16406"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M9.5 8H13.5L14.8333 8.00013"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M4.58203 2.08594L5.24824 3.23984L7.24856 6.7045"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M10.75 12.7656L11.4162 13.9196"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M2.08203 4.58594L3.23599 5.25218"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M12.7656 10.75L13.9195 11.4161"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M2.08203 11.4162L3.23594 10.75"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M12.7656 5.25214L13.9195 4.58594"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M4.58203 13.9154L5.24824 12.7615L7.24856 9.29688"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M10.75 3.23984L11.4162 2.08594"
+          stroke="#808080"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_8401_14871">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+export function WidgetDashboard() {
+  return (
+    <svg
+      width="14"
+      height="11"
+      viewBox="0 0 14 11"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect x="0.5" y="0.5" width="13" height="10" rx="1.5" stroke="#F9F9F9" />
+      <rect x="2" y="2" width="2" height="7" rx="0.4" fill="#F9F9F9" />
+    </svg>
+  );
+}
+
+export function CaretRight() {
+  return (
+    <svg
+      width="3"
+      height="6"
+      viewBox="0 0 3 6"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2.88547 2.67585C2.9588 2.76036 3 2.87497 3 2.99446C3 3.11396 2.9588 3.22856 2.88547 3.31307L0.672554 5.86242C0.636469 5.90546 0.593304 5.93979 0.545578 5.96341C0.497852 5.98703 0.446521 5.99946 0.394581 5.99998C0.34264 6.0005 0.291129 5.9891 0.243055 5.96644C0.19498 5.94378 0.151303 5.91032 0.114574 5.86801C0.0778452 5.82569 0.0487988 5.77538 0.0291298 5.71999C0.00946089 5.66461 -0.000436582 5.60527 1.47699e-05 5.54543C0.000466121 5.48559 0.0112574 5.42646 0.0317588 5.37148C0.0522602 5.3165 0.0820612 5.26677 0.119423 5.2252L2.05577 2.99446L0.119423 0.763727C0.0481661 0.678733 0.00873724 0.564898 0.00962852 0.446738C0.0105198 0.328578 0.0516599 0.215549 0.124188 0.131994C0.196716 0.0484385 0.29483 0.00104378 0.397396 1.66719e-05C0.499963 -0.00100996 0.598776 0.0444135 0.672554 0.126503L2.88547 2.67585Z"
+        fill="#F9F9F9"
+        fillOpacity="0.6"
+      />
+    </svg>
+  );
+}
+
+export function Add() {
+  return (
+    <svg
+      width="9"
+      height="9"
+      viewBox="0 0 9 9"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4.5 0.375V4.5M4.5 4.5V8.625M4.5 4.5H0.375M4.5 4.5H8.625"
+        stroke="#F9F9F9"
+        strokeOpacity="0.8"
+        strokeWidth="0.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

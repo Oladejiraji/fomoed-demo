@@ -4,7 +4,12 @@ import { useState } from "react";
 import { PricechartMorph } from "@/components/chart/pricechart-morph";
 import AssetSelector from "@/components/asset-selector";
 import GeneralAssets from "@/lib/assets";
-import { AssetType } from "@/app/deji/page";
+import { StaticImageData } from "next/image";
+
+export interface AssetType {
+  label: string;
+  asset: StaticImageData;
+}
 
 const assetData = [
   { label: "Robinhood", asset: GeneralAssets.Robinhood },

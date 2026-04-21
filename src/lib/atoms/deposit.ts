@@ -21,6 +21,7 @@ export const tokens = [
     symbol: "USDT",
     image:
       "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
+    imageClassName: "mix-blend-multiply rounded-[16px]",
   },
   {
     id: 4,
@@ -42,6 +43,7 @@ export const tokens = [
     symbol: "LINK",
     image:
       "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771AF9Ca656af840dff83E8264EcF986CA/logo.png",
+    imageClassName: "rounded-[16px]",
   },
   {
     id: 7,
@@ -66,7 +68,7 @@ export const tokens = [
   },
 ];
 
-export type Token = (typeof tokens)[number];
+export type Token = (typeof tokens)[number] & { imageClassName?: string };
 
 export const selectedTokenAtom = atom<Token>(tokens[1]);
 

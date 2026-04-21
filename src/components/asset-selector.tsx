@@ -1,7 +1,7 @@
-import { AssetType } from "@/app/deji/page";
 import Image from "next/image";
 import React from "react";
 import { motion } from "motion/react";
+import { AssetType } from "@/app/full-chart/page";
 
 interface IProps {
   assetData: Array<AssetType>;

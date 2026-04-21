@@ -15,7 +15,7 @@ export function NetworkList(props: IProps) {
   const [selectedNetwork, setSelectedNetwork] = useAtom(selectedNetworkAtom);
 
   return (
-    <div className="max-w-[320px] w-full max-h-86 flex flex-col overflow-hidden shadow-[0_0_0_1px_rgba(92,92,92,0.45)] bg-[linear-gradient(180deg,#1f1f21_0%,#1a1a1c_100%)] rounded-2xl">
+    <div className="max-w-[320px] mx-auto w-full max-h-86 flex flex-col overflow-hidden shadow-[0_0_0_1px_rgba(92,92,92,0.45)] bg-[linear-gradient(180deg,#1f1f21_0%,#1a1a1c_100%)] rounded-2xl">
       <div className="h-12 px-4 flex items-center justify-between border-b border-[#262626]">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
@@ -42,13 +42,13 @@ export function NetworkList(props: IProps) {
           <CheckIcon />
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto px-2 flex flex-col relative">
+      <div className="flex-1 overflow-y-auto scrollbar-minimal px-2 pt-1 pb-1 flex flex-col relative">
         {hoveredIndex !== null && (
           <motion.div
             className="absolute left-2 right-2 h-9 rounded-lg bg-[#272729] z-1 pointer-events-none"
-            initial={{ top: hoveredIndex * 36 }}
-            animate={{ top: hoveredIndex * 36 }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            initial={false}
+            animate={{ top: hoveredIndex * 36 + 4 }}
+            transition={{ duration: 0.12, ease: [0.23, 1, 0.32, 1] }}
           />
         )}
         {networks.map((network, index) => {
@@ -63,8 +63,22 @@ export function NetworkList(props: IProps) {
                   handleClose?.();
                 }
               }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
+              onMouseEnter={() => {
+                if (
+                  window.matchMedia("(hover: hover) and (pointer: fine)")
+                    .matches
+                ) {
+                  setHoveredIndex(index);
+                }
+              }}
+              onMouseLeave={() => {
+                if (
+                  window.matchMedia("(hover: hover) and (pointer: fine)")
+                    .matches
+                ) {
+                  setHoveredIndex(null);
+                }
+              }}
             >
               <div className="flex items-center gap-2 h-9">
                 <div className="flex items-center gap-1">
