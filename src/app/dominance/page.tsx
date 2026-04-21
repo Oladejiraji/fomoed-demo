@@ -1,5 +1,6 @@
 "use client";
-
+import { Canvas, extend, useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls, shaderMaterial, useTexture } from "@react-three/drei";
 import {
   BtcWave,
   EthWave,
@@ -8,9 +9,172 @@ import {
   ThreeDotsIcon,
 } from "@/icons";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import vertexShader from "../../shaders/dominance/vertex.glsl";
+import fragmentShader from "../../shaders/dominance/fragment.glsl";
+import { RepeatWrapping } from "three";
+import { easing } from "maath";
+
+const CardMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uOpacity: 1,
+    uWaveOffset: 1,
+    uTexture: null,
+    uTextureSpeed: 0,
+    uIsLoading: 0,
+    uIsLoadingOpacity: 0,
+  },
+  vertexShader,
+  fragmentShader,
+);
+
+extend({ CardMaterial });
 
 type Wave = "btc" | "eth" | "others";
+
+type WaveMeshProps = {
+  texture: ReturnType<typeof useTexture>;
+  position: [number, number, number];
+  width: number;
+  height: number;
+  ratio: number;
+  uWaveOffset: number;
+  uTextureSpeed: number;
+  uIsLoadingOpacity: number;
+  uIsLoading: number;
+  index: number;
+  uOpacity: number;
+};
+
+function WaveMesh({
+  texture,
+  position,
+  width,
+  height,
+  ratio,
+  uWaveOffset,
+  uTextureSpeed,
+  uIsLoading,
+  uIsLoadingOpacity,
+  index,
+  uOpacity,
+}: WaveMeshProps) {
+  const materialRef = useRef<any>(null);
+
+  useFrame((state, delta) => {
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value =
+        state.clock.getElapsedTime() * 0.75;
+      easing.damp(
+        materialRef.current.uniforms.uIsLoading,
+        "value",
+        uIsLoading,
+        0.5 + 0.5 * index,
+        delta,
+      );
+    }
+  });
+
+  return (
+    <mesh position={position}>
+      <planeGeometry args={[width, height, 64, Math.ceil(64 / ratio)]} />
+      {/* @ts-ignore */}
+      <cardMaterial
+        ref={materialRef}
+        wireframe={false}
+        transparent
+        uOpacity={uOpacity}
+        uWaveOffset={uWaveOffset}
+        uTexture={texture}
+        uTextureSpeed={uTextureSpeed}
+        // uIsLoading={uIsLoading}
+        uIsLoadingOpacity={uIsLoadingOpacity}
+      />
+    </mesh>
+  );
+}
+
+function DominanceExperience() {
+  const { viewport } = useThree((state) => state);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  const [bigTexture, mdTexture, smTexture] = useTexture([
+    "/images/dominance/big-gradient.png",
+    "/images/dominance/md-gradient.png",
+    "/images/dominance/sm-gradient.png",
+  ]);
+
+  //eslint-disable-next-line
+  bigTexture.wrapS = mdTexture.wrapS = smTexture.wrapS = RepeatWrapping;
+  //eslint-disable-next-line
+  bigTexture.wrapT = mdTexture.wrapT = smTexture.wrapT = RepeatWrapping;
+
+  const ratio = viewport.width / viewport.height;
+
+  return (
+    <group>
+      <WaveMesh
+        texture={bigTexture}
+        position={[0, -0.75, 0]}
+        width={viewport.width}
+        height={viewport.height}
+        ratio={ratio}
+        uWaveOffset={0.5}
+        uTextureSpeed={0.76}
+        uIsLoadingOpacity={0.4}
+        uIsLoading={isLoading ? 0 : 1}
+        index={2}
+        uOpacity={1}
+      />
+      <WaveMesh
+        texture={mdTexture}
+        position={[0, -viewport.height * 0.25 - 0.75, 0.01]}
+        width={viewport.width}
+        height={viewport.height * 0.5}
+        ratio={ratio}
+        uWaveOffset={-0.95}
+        uTextureSpeed={-0.86}
+        uIsLoadingOpacity={0.4}
+        uIsLoading={isLoading ? 0 : 1}
+        index={1}
+        uOpacity={1}
+      />
+      <WaveMesh
+        texture={smTexture}
+        position={[0, -viewport.height * 0.375 - 0.75, 0.011]}
+        width={viewport.width}
+        height={viewport.height * 0.25}
+        ratio={ratio}
+        uWaveOffset={0.45}
+        uTextureSpeed={0.34}
+        uIsLoadingOpacity={0.5}
+        uIsLoading={isLoading ? 0 : 1}
+        index={0}
+        uOpacity={1}
+      />
+    </group>
+  );
+}
+
+function DominanceCanvas() {
+  return (
+    <Canvas className="w-full h-full">
+      <DominanceExperience />
+      <OrbitControls />
+    </Canvas>
+  );
+}
 
 const BtcDominance = () => {
   const [active, setActive] = useState<Wave | null>(null);
@@ -20,13 +184,13 @@ const BtcDominance = () => {
   const regularTrack = (wave: Wave) =>
     cn(
       "flex w-[300%] animate-wave-slide transition-opacity duration-500",
-      active === wave ? "opacity-0" : "wave-paused"
+      active === wave ? "opacity-0" : "wave-paused",
     );
 
   const activeTrack = (wave: Wave) =>
     cn(
       "absolute inset-0 flex w-[300%] animate-wave-slide transition-opacity duration-500",
-      active === wave ? "" : "wave-paused opacity-0"
+      active === wave ? "" : "wave-paused opacity-0",
     );
 
   return (
@@ -86,7 +250,8 @@ const BtcDominance = () => {
         </div>
 
         <div className="relative mt-10 h-55.25">
-          <div
+          <DominanceCanvas />
+          {/* <div
             className="absolute inset-x-0 bottom-0 cursor-pointer overflow-hidden"
             onClick={() => activate("btc")}
           >
@@ -178,7 +343,7 @@ const BtcDominance = () => {
                 aria-hidden
               />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </main>
