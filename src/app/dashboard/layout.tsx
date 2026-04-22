@@ -12,7 +12,7 @@ export default function Layout(props: IProps) {
   return (
     <div className="w-full h-screen overflow-hidden flex bg-[#1A1A1A]">
       <Sidebar />
-      <div className="flex-1 border border-[#222222] mt-1 rounded-xl">
+      <div className="flex-1 border border-[#222222] mt-1 rounded-xl flex flex-col">
         <Header />
         {children}
       </div>

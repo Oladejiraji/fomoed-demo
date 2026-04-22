@@ -3,6 +3,9 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { Layout } from "@/components/shared/layout";
 
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
