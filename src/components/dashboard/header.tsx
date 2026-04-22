@@ -3,7 +3,7 @@ import React from "react";
 
 export function Header() {
   return (
-    <div className="w-full border-b border-[#262626] px-2 py-1.75 flex items-center gap-2">
+    <div className="w-full border-b border-[#262626] px-2 h-10.5 flex items-center gap-2">
       <div className="w-7 h-7 flex justify-center items-center">
         <WidgetDashboard />
       </div>

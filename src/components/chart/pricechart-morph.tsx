@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useSyncExternalStore,
+} from "react";
+import { useSetAtom } from "jotai";
+import { priceAtom, pctChangeAtom } from "@/atoms/price";
 import {
   AreaChart,
   Area,
@@ -77,7 +84,7 @@ function DurationSection() {
       {durationOptions.map((item) => {
         const isActive = selectedDuration === item.value;
         const activeClassName =
-          "shadow-[0_0_0_1px_rgba(71,71,71,0.25),0_4px_16px_0_rgba(1,1,1,0.25),inset_1px_2px_0_0_rgba(71,71,71,0.55),inset_1px_1px_0_0_rgba(71,71,71,0.85),inset_-1px_1px_0_0_rgba(71,71,71,0.85),inset_-1px_-1px_0_0_rgba(71,71,71,0.55),1px_4px_16px_0_rgba(71,71,71,0.08)] bg-gradient-to-b from-[#474747] to-[#3d3d3d] text-white";
+          "shadow-[0px_4px_16px_0px_#D2D2D208] bg-[linear-gradient(180deg,#F8F8F8_-35%,#E6E6E6_167.5%)] text-[#3D3D3D]";
 
         return (
           <button
@@ -114,20 +121,41 @@ function AnimatedPrice({ value }: { value: number }) {
     return unsubscribe;
   }, [spring]);
 
-  return <span>${display.toLocaleString()}</span>;
+  return (
+    <span suppressHydrationWarning>${display.toLocaleString("en-US")}</span>
+  );
 }
 
 interface PricechartMorphProps {
   exchange?: string;
+  containerClassName?: string;
 }
 
 export function PricechartMorph({
   exchange = "Robinhood",
+  containerClassName = "",
 }: PricechartMorphProps) {
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const [data, setData] = useState<DataPoint[]>(() =>
     generateInitialData(exchange),
   );
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isLive, setIsLive] = useState(false);
+  const liveStartedRef = useRef(false);
+  const setPrice = useSetAtom(priceAtom);
+  const setPctChange = useSetAtom(pctChangeAtom);
+
+  useEffect(() => {
+    const latestPrice = data[data.length - 1]?.price ?? 0;
+    const firstPrice = data[0]?.price ?? latestPrice;
+    const pct = (((latestPrice - firstPrice) / firstPrice) * 100).toFixed(2);
+    setPrice(latestPrice);
+    setPctChange(pct);
+  }, [data, setPrice, setPctChange]);
 
   const exchangeRef = useRef(exchange);
   const lastPriceRef = useRef(data[data.length - 1].price);
@@ -139,10 +167,10 @@ export function PricechartMorph({
     exchangeRef.current = exchange;
 
     const target = generateInitialData(exchange);
-    setIsTransitioning(true);
     animRef.current?.stop();
 
     setData((prev) => {
+      setIsTransitioning(true);
       const from = prev;
 
       animRef.current = animate(0, 1, {
@@ -176,32 +204,46 @@ export function PricechartMorph({
     });
 
     return () => animRef.current?.stop();
-  }, [exchange]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [exchange]);
 
-  // Stream new price data every 2 seconds (paused during transition)
+  // Stream new price data every 2 seconds, with a 3s delay on first load
   useEffect(() => {
     if (isTransitioning) return;
 
-    const interval = setInterval(() => {
-      setData((prev) => {
-        const last = lastPriceRef.current;
-        const nextPrice = generateNextPrice(last, exchangeRef.current);
-        lastPriceRef.current = nextPrice;
-        const now = new Date();
-        const newPoint: DataPoint = {
-          time: now.toLocaleTimeString("en-US", {
-            hour12: false,
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          }),
-          price: nextPrice,
-        };
-        return [...prev.slice(1), newPoint];
-      });
-    }, 2000);
+    let interval: ReturnType<typeof setInterval>;
 
-    return () => clearInterval(interval);
+    const startInterval = () => {
+      liveStartedRef.current = true;
+      setIsLive(true);
+      interval = setInterval(() => {
+        setData((prev) => {
+          const last = lastPriceRef.current;
+          const nextPrice = generateNextPrice(last, exchangeRef.current);
+          lastPriceRef.current = nextPrice;
+          const now = new Date();
+          const newPoint: DataPoint = {
+            time: now.toLocaleTimeString("en-US", {
+              hour12: false,
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            }),
+            price: nextPrice,
+          };
+          return [...prev.slice(1), newPoint];
+        });
+      }, 2000);
+    };
+
+    const timeout = setTimeout(
+      startInterval,
+      liveStartedRef.current ? 0 : 3000,
+    );
+
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
   }, [isTransitioning]);
 
   // Always derive Y domain from current displayed data
@@ -227,8 +269,15 @@ export function PricechartMorph({
     C: latestPrice.toFixed(2),
   };
 
+  if (!mounted) return null;
+
   return (
-    <div className="bg-[#212121] h-92 w-207.75 rounded-xl flex flex-col overflow-hidden">
+    <div
+      className={cn(
+        "bg-[#212121] h-92 w-207.75 rounded-xl flex flex-col overflow-hidden",
+        containerClassName,
+      )}
+    >
       <div className="h-10 flex items-center justify-between border-b border-[#F9F9F905]">
         <div className="flex items-center gap-1">
           <div className="flex items-center w-10">
@@ -356,7 +405,7 @@ export function PricechartMorph({
                     stroke="#6DCB72"
                     strokeWidth={1.5}
                     fill="url(#priceGradientMorph)"
-                    isAnimationActive={false}
+                    isAnimationActive={!isLive}
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -380,12 +429,12 @@ export function PricechartMorph({
               <p className="text-[#F9F9F980] tracking-[-0.0056em] text-sm leading-5 font-medium px-2">
                 %
               </p>
-              <p className="text-[#F9F9F980] tracking-[-0.0056em] text-sm leading-5 font-medium px-2.5">
+              {/* <p className="text-[#F9F9F980] tracking-[-0.0056em] text-sm leading-5 font-medium px-2.5">
                 Log
               </p>
               <p className="text-[#007CE9] tracking-[-0.0056em] text-sm leading-5 font-medium px-2.5">
                 Auto
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

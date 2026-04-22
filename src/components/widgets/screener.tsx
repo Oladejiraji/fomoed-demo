@@ -215,7 +215,7 @@ const Screener = () => {
 
   return (
     <div
-      className="bg-[#262626] w-172 rounded-[16px] border border-[#262626] overflow-hidden"
+      className="bg-[#262626]  h-full w-full border border-[#262626] overflow-hidden"
       style={{
         boxShadow:
           "0px 0px 0px 1px #FFFFFF0A inset, 0px 2px 0px 0px #FFFFFF14 inset, 0px 0px 0px 1px #00000029, 0px 1px 1px -0.5px #0000002E, 0px 3px 3px -1.5px #0000002E, 0px 6px 6px -3px #00000040, 0px 12px 12px -6px #0000002E",
@@ -230,7 +230,7 @@ const Screener = () => {
                 key={filter.value}
                 type="button"
                 onClick={() => setActiveFilter(filter.value)}
-                className={`relative rounded-[4px] px-3 py-1 text-xs transition-colors cursor-pointer ${
+                className={`relative rounded-lg px-3 py-1 text-xs transition-colors cursor-pointer ${
                   isActive
                     ? "text-[#F9F9F9]"
                     : "text-[#F9F9F9]/40 hover:text-[#F9F9F9]/70"
@@ -239,7 +239,7 @@ const Screener = () => {
                 {isActive && (
                   <motion.span
                     layoutId="screener-filter-active"
-                    className="absolute inset-0 rounded-[4px] bg-[#1B1B1B]"
+                    className="absolute inset-0 rounded-lg bg-[#1B1B1B]"
                     transition={{ type: "spring", stiffness: 500, damping: 35 }}
                   />
                 )}
@@ -257,7 +257,7 @@ const Screener = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="h-full">
         <div className="select-none ">
           <div
             className="mb-0 flex h-10 w-full items-center px-4"
