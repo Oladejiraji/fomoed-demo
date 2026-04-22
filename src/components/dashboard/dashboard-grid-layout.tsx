@@ -3,7 +3,7 @@ import React from "react";
 import { Responsive, useContainerWidth } from "react-grid-layout";
 import Screener from "../widgets/screener";
 import { PriceChart } from "../widgets/price-chart";
-import { OrderbookTrades } from "../order-book";
+import OrderBook from "../widgets/order-book";
 
 const layouts = {
   lg: [
@@ -57,8 +57,8 @@ export function DashboardGridLayout(props: IProps) {
           <div className="rounded-2xl overflow-hidden" key="2">
             <Screener />
           </div>
-          <div className="rounded-2xl overflow-hidden" key="3">
-            <OrderbookTrades />
+          <div className="bg-zinc-500 rounded-2xl overflow-hidden" key="3">
+            <OrderBook />
           </div>
           <div
             className="bg-zinc-600 rounded-2xl overflow-hidden"
