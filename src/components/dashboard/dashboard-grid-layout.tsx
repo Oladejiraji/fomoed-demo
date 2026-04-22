@@ -36,7 +36,7 @@ export function DashboardGridLayout(props: IProps) {
   return (
     <div
       ref={containerRef}
-      className="flex-1 w-full h-full flex overflow-y-auto"
+      className="flex-1 w-full h-full flex overflow-y-auto scrollbar-minimal"
     >
       {mounted && (
         <Responsive
