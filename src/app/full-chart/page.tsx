@@ -11,7 +11,7 @@ export interface AssetType {
   asset: StaticImageData;
 }
 
-const assetData = [
+export const assetData = [
   { label: "Robinhood", asset: GeneralAssets.Robinhood },
   { label: "Crypto.com", asset: GeneralAssets.Cryptodotcom },
   { label: "Kraken", asset: GeneralAssets.Kraken },

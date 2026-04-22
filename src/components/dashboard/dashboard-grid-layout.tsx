@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { Responsive, useContainerWidth } from "react-grid-layout";
+import Screener from "../widgets/screener";
+import { PriceChart } from "../widgets/price-chart";
 
 const layouts = {
   lg: [
@@ -19,9 +21,15 @@ const layouts = {
   ],
 };
 
-export function DashboardGridLayout() {
+interface IProps {
+  initialWidth: number;
+}
+
+export function DashboardGridLayout(props: IProps) {
+  const { initialWidth } = props;
   const { width, containerRef, mounted } = useContainerWidth({
     measureBeforeMount: false,
+    initialWidth,
   });
 
   return (
@@ -40,13 +48,14 @@ export function DashboardGridLayout() {
           className="w-full h-full flex-1"
         >
           <div
-            className="bg-zinc-300 rounded-2xl overflow-hidden"
+            className="rounded-2xl overflow-hidden shadow-[0px_0px_0px_1px_#FFFFFF0A_inset,0px_2px_0px_0px_#FFFFFF14_inset,0px_0px_0px_1px_#00000029,0px_1px_1px_-0.5px_#0000002E,0px_3px_3px_-1.5px_#0000002E,0px_6px_6px_-3px_#00000040,0px_12px_12px_-6px_#0000002E]"
             key="1"
-          ></div>
-          <div
-            className="bg-zinc-400 rounded-2xl overflow-hidden"
-            key="2"
-          ></div>
+          >
+            <PriceChart />
+          </div>
+          <div className="rounded-2xl overflow-hidden" key="2">
+            <Screener />
+          </div>
           <div
             className="bg-zinc-500 rounded-2xl overflow-hidden"
             key="3"
