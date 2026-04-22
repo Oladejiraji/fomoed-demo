@@ -216,3 +216,8 @@ body {
   background: rgba(249, 249, 249, 0.04);
   border-radius: 999px;
 }
+
+.react-grid-placeholder {
+  background-color: #a3e635 !important;
+  border-radius: 16px !important;
+}
