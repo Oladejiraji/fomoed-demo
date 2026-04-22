@@ -54,6 +54,10 @@ export const TOKEN_DATA: Record<string, TokenInfo> = {
     bg: "#0847F7",
   },
   ETH: { name: "ETH", image: "/images/tokens/eth.svg", bg: "#627EEA" },
+  USDT: { name: "USDT", image: "/images/tokens/usdt.png", bg: "#26A17B" },
+  AVAX: { name: "AVAX", image: "/images/tokens/avax.png", bg: "#E84142" },
+  TRX: { name: "TRX", image: "/images/tokens/trx.png", bg: "#FF060A" },
+  MON: { name: "MON", image: "/images/tokens/mon.png", bg: "#836EF9" },
 };
 
 const MOCK_NEWS: Record<string, TokenNewsData> = {
@@ -492,6 +496,12 @@ const MOCK_NEWS: Record<string, TokenNewsData> = {
     ],
   },
 };
+
+// Placeholder aliases: new tokens reuse existing articles until real data is added.
+MOCK_NEWS.USDT = { token: TOKEN_DATA.USDT, articles: MOCK_NEWS.USDC.articles };
+MOCK_NEWS.AVAX = { token: TOKEN_DATA.AVAX, articles: MOCK_NEWS.ETH.articles };
+MOCK_NEWS.TRX = { token: TOKEN_DATA.TRX, articles: MOCK_NEWS.ETH.articles };
+MOCK_NEWS.MON = { token: TOKEN_DATA.MON, articles: MOCK_NEWS.ETH.articles };
 
 interface FloatingControlsProps {
   tokenSymbol: string | null;

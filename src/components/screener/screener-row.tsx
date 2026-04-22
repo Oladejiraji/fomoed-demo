@@ -6,7 +6,13 @@ import {
   animate,
   type MotionValue,
 } from "motion/react";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import { StarButton } from "@/components/screener/star-button";
 import { ScreenerToken } from "@/app/drag-to-interact/page";
@@ -72,9 +78,9 @@ function ActionButton({
         style={{ background: bg }}
         onClick={onClick}
       >
-        <Image src={src} width={28} height={28} className="block" alt={label} />
+        <Image src={src} width={22} height={22} className="block" alt={label} />
         <span
-          className="whitespace-nowrap text-[10px] font-semibold tracking-wide"
+          className="whitespace-nowrap text-[8px] font-semibold tracking-wide"
           style={{ color: labelColor }}
         >
           {label}
@@ -88,8 +94,8 @@ function TokenIcon({ token }: { token: ScreenerToken }) {
   return (
     <Image
       src={token.logo}
-      width={28}
-      height={28}
+      width={18}
+      height={18}
       alt={token.symbol}
       className="block shrink-0 rounded-full outline-1 -outline-offset-1 outline-white/10"
     />
@@ -109,14 +115,26 @@ export const TokenRow = forwardRef<
     onDragStart: () => void;
     onDragEnd: () => void;
     onNewsClick?: () => void;
+    favourited?: boolean;
+    onFavouriteChange?: (next: boolean) => void;
   }
 >(function TokenRow(
-  { token, isLocked, isMobile, onDragStart, onDragEnd, onNewsClick },
+  {
+    token,
+    isLocked,
+    isMobile,
+    onDragStart,
+    onDragEnd,
+    onNewsClick,
+    favourited,
+    onFavouriteChange,
+  },
   ref,
 ) {
   const x = useMotionValue(0);
   const [isFavOpen, setIsFavOpen] = useState(false);
-  const [isFavourited, setIsFavourited] = useState(false);
+  const [internalFavourited, setInternalFavourited] = useState(false);
+  const isFavourited = favourited ?? internalFavourited;
 
   // News: springs to full x width at threshold, otherwise follows default (x/3)
   const newsWidth = useMotionValue(ACTION_BUTTON_WIDTH);
@@ -127,7 +145,11 @@ export const TokenRow = forwardRef<
     return x.on("change", (v) => {
       if (v >= NEWS_EXPAND_THRESHOLD && !expandedRef.current) {
         expandedRef.current = true;
-        animate(newsWidth, MAX_DRAG_RIGHT, { type: "spring", stiffness: 400, damping: 25 });
+        animate(newsWidth, MAX_DRAG_RIGHT, {
+          type: "spring",
+          stiffness: 400,
+          damping: 25,
+        });
         newsZIndex.set(10);
       } else if (v < NEWS_EXPAND_THRESHOLD && expandedRef.current) {
         expandedRef.current = false;
@@ -176,7 +198,12 @@ export const TokenRow = forwardRef<
       setIsFavOpen(false);
     } else if (current < -DRAG_OPEN_THRESHOLD) {
       setIsFavOpen(true);
-      setIsFavourited((prev) => !prev);
+      const next = !isFavourited;
+      if (onFavouriteChange) {
+        onFavouriteChange(next);
+      } else {
+        setInternalFavourited(next);
+      }
       animate(x, -FAVORITES_WIDTH * 0.65, {
         type: "spring",
         stiffness: 300,
@@ -250,7 +277,7 @@ export const TokenRow = forwardRef<
         drag={isLocked ? false : "x"}
         dragConstraints={{ left: -FAVORITES_WIDTH, right: MAX_DRAG_RIGHT }}
         dragElastic={{ left: 0.1, right: 0.05 }}
-        className="relative z-10 flex h-14 w-full select-none items-center bg-black p-4 font-semibold will-change-transform"
+        className="relative z-10 flex h-10 w-full select-none items-center bg-[#262626] px-4 will-change-transform"
         style={{
           x,
           cursor: isLocked ? "default" : "grab",
@@ -261,30 +288,30 @@ export const TokenRow = forwardRef<
       >
         {/* Symbol + Price */}
         <div className="flex min-w-0 flex-2 items-center">
-          <div className="flex flex-1 items-center gap-3">
+          <div className="flex flex-1 items-center gap-1">
             <TokenIcon token={token} />
-            <span className="text-[15px] font-medium text-white">
+            <span className="text-xs font-medium text-[#F9F9F9]">
               {token.symbol}
             </span>
           </div>
-          <div className="flex flex-1 items-center justify-start pl-3.5 text-sm tabular-nums text-neutral-300">
+          <div className="flex flex-1 items-center justify-start pl-3.5 text-xs tabular-nums text-[#f9f9f9]/80">
             {token.price}
           </div>
         </div>
 
         {/* Change */}
         <div
-          className="flex min-w-0 items-center justify-end gap-2"
+          className="flex min-w-0 items-center justify-end gap-0.5"
           style={{ flex: 1.3 }}
         >
-          <span className="text-sm tabular-nums text-neutral-300">
+          <span className="text-xs tabular-nums text-[#f9f9f9]/80">
             {token.change}
           </span>
           <span
-            className={`rounded-md px-1.5 py-0.5 text-xs tabular-nums ${
+            className={`rounded-[3px] h-4 px-0.5 text-[10px] text-semibold tabular-nums ${
               isNegative
                 ? "bg-red-400/10 text-red-400"
-                : "bg-green-400/12 text-green-400"
+                : "bg-[#4CAF82]/10 text-[#4CAF82]"
             }`}
           >
             {token.changePct}
@@ -293,7 +320,7 @@ export const TokenRow = forwardRef<
 
         {/* Volume */}
         {!isMobile && (
-          <div className="flex min-w-0 flex-1 items-center justify-end text-sm tabular-nums text-neutral-300">
+          <div className="flex min-w-0 flex-1 items-center justify-end text-xs tabular-nums text-[#f9f9f9]/80">
             {token.volume}
           </div>
         )}
@@ -304,16 +331,16 @@ export const TokenRow = forwardRef<
             className="flex min-w-0 items-center justify-end gap-2 pl-12"
             style={{ flex: 1.3 }}
           >
-            <span className="text-sm tabular-nums text-neutral-300">
+            <span className="text-xs tabular-nums text-[#f9f9f9]/80">
               {token.marketCap}
             </span>
             <span
-              className={`rounded-md px-1.5 py-0.5 text-xs tabular-nums ${
+              className={`rounded-[3px] h-4 px-0.5 text-[10px] text-semibold tabular-nums ${
                 !token.marketCapChange
                   ? "invisible"
                   : token.marketCapChange.startsWith("-")
                     ? "bg-red-400/10 text-red-400"
-                    : "bg-green-400/12 text-green-400"
+                    : "bg-[#4CAF82]/10 text-[#4CAF82]"
               }`}
             >
               {token.marketCapChange ?? "+0.00%"}
@@ -324,7 +351,7 @@ export const TokenRow = forwardRef<
         {/* Volatility */}
         {!isMobile && (
           <div
-            className="flex min-w-0 items-center justify-end text-sm tabular-nums text-neutral-300"
+            className="flex min-w-0 items-center justify-end text-xs tabular-nums text-[#f9f9f9]/80"
             style={{ flex: 1.2 }}
           >
             {token.volatility ?? "—"}
