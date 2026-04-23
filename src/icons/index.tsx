@@ -638,7 +638,7 @@ export function WidgetDashboard() {
   );
 }
 
-export function CaretRight() {
+export function CaretRight({ className }: { className?: string }) {
   return (
     <svg
       width="3"
@@ -646,6 +646,7 @@ export function CaretRight() {
       viewBox="0 0 3 6"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         fillRule="evenodd"
