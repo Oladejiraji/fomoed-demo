@@ -1,7 +1,7 @@
 import { QuestionIcon, ThreeDotsIcon } from "@/icons";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const dominanceData = [
   {
@@ -52,6 +52,101 @@ const othersData = [
   },
 ];
 
+type DominanceDatum = (typeof dominanceData)[number];
+
+function DominanceItem({ dom, index }: { dom: DominanceDatum; index: number }) {
+  const [flipped, setFlipped] = useState(false);
+  const [showDominance, setShowDominance] = useState(false);
+
+  useEffect(() => {
+    const flipTimer = setTimeout(() => setFlipped(true), 2800 + index * 200);
+    const textTimer = setTimeout(
+      () => setShowDominance(true),
+      3100 + index * 200,
+    );
+    return () => {
+      clearTimeout(flipTimer);
+      clearTimeout(textTimer);
+    };
+  }, [index]);
+
+  return (
+    <motion.div
+      className="flex gap-2 items-center"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 1.2, ease: "easeOut" }}
+    >
+      <div className="w-8 h-8" style={{ perspective: 600 }}>
+        <motion.div
+          className="relative w-full h-full"
+          style={{ transformStyle: "preserve-3d" }}
+          animate={{ rotateY: flipped ? 180 : 0 }}
+          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+        >
+          {Array.from({ length: 10 }).map((_, edgeIdx) => {
+            const z = -2.5 + (5 / 9) * edgeIdx;
+            return (
+              <div
+                key={edgeIdx}
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: edgeIdx % 2 === 0 ? "#525252" : "#404040",
+                  transform: `translateZ(${z}px)`,
+                }}
+              />
+            );
+          })}
+          <div
+            className="absolute inset-0 rounded-full overflow-hidden"
+            style={{
+              backfaceVisibility: "hidden",
+              transform: "translateZ(3px)",
+            }}
+          >
+            <Image
+              src={dom.image}
+              width={32}
+              height={32}
+              alt={dom.label}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div
+            className="absolute inset-0 rounded-full overflow-hidden"
+            style={{
+              backfaceVisibility: "hidden",
+              transform: "rotateY(180deg) translateZ(3px)",
+            }}
+          >
+            <Image
+              src="/images/tokens/percentage.png"
+              width={32}
+              height={32}
+              alt="percentage"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </motion.div>
+      </div>
+      <div className="relative grid overflow-hidden h-8">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.p
+            key={showDominance ? "dominance" : "price"}
+            className="text-2xl font-medium leading-8 text-[#F9F9F9] [grid-area:1/1]"
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: "0%", opacity: 1 }}
+            exit={{ y: "-100%", opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+          >
+            {showDominance ? `${dom.dominance}%` : `$${dom.price}`}
+          </motion.p>
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+}
+
 const Dominance = () => {
   //   const [dominanceState, setDominanceState] = useState(dominanceData);
   return (
@@ -77,9 +172,9 @@ const Dominance = () => {
       <div className="px-7 py-4 flex items-center">
         <div className="pr-4">
           <h3 className="text-xs text-[#F9F9F999] py-1.5 leading-3 mb-1">
-            Token Dominance
+            BTC Dominance
           </h3>
-          <h2 className="text-[#F9F9F9] font-medium text-2xl">63.09%</h2>
+          <h2 className="text-[#F9F9F9] font-medium text-2xl">53.09%</h2>
         </div>
         <div className="pl-4 border-l-2 border-[#343434] flex items-center gap-4">
           <div>
@@ -115,24 +210,7 @@ const Dominance = () => {
           {dominanceData.map((dom, i) => (
             <div key={i} style={{ width: `${dom.dominance}%` }}>
               {dom.name.toLowerCase() !== "others" ? (
-                <motion.div
-                  className="flex gap-2 items-center"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 1.2, ease: "easeOut" }}
-                >
-                  <div>
-                    <Image
-                      src={dom.image}
-                      width={32}
-                      height={32}
-                      alt={dom.label}
-                    />
-                  </div>
-                  <p className="text-2xl font-medium text-[#F9F9F9]">
-                    ${dom.price}
-                  </p>
-                </motion.div>
+                <DominanceItem dom={dom} index={i} />
               ) : (
                 <div className="flex items-center">
                   {othersData.map((oth, j) => (
@@ -163,12 +241,12 @@ const Dominance = () => {
         </div>
 
         <div
-          className="h-6 rounded-full bg-[#3A3A3A] flex items-center gap-2"
+          className="h-6 rounded-full bg-[#3A3A3A] flex items-center gap-0.5"
           style={{ boxShadow: "0px 4px 28px 0px #00000040" }}
         >
           {dominanceData.map((dom, i) => {
             const gapShare =
-              ((dominanceData.length - 1) * 8) / dominanceData.length;
+              ((dominanceData.length - 1) * 2) / dominanceData.length;
             return (
               <motion.div
                 key={i}
@@ -187,7 +265,6 @@ const Dominance = () => {
                   className="h-full w-full rounded-full"
                   style={{
                     backgroundColor: dom.bg,
-                    boxShadow: "0px 4px 28px 0px #00000040",
                   }}
                 />
               </motion.div>
