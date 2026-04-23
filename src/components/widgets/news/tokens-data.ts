@@ -1,0 +1,51 @@
+export const tokens = [
+  {
+    symbol: "AAVE",
+    name: "Aave",
+    logo: "https://assets.coingecko.com/coins/images/12645/small/aave-token-round.png",
+    price: 168.42,
+    change: 4.37,
+  },
+  {
+    symbol: "USDT",
+    name: "Tether",
+    logo: "https://assets.coingecko.com/coins/images/325/small/Tether.png",
+    price: 1.0,
+    change: 0.01,
+  },
+  {
+    symbol: "SOL",
+    name: "Solana",
+    logo: "https://assets.coingecko.com/coins/images/4128/small/solana.png",
+    price: 134.57,
+    change: -2.18,
+  },
+  {
+    symbol: "ETH",
+    name: "Ethereum",
+    logo: "https://assets.coingecko.com/coins/images/279/small/ethereum.png",
+    price: 1587.34,
+    change: -1.94,
+  },
+  {
+    symbol: "LINK",
+    name: "Chainlink",
+    logo: "https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png",
+    price: 12.83,
+    change: 1.62,
+  },
+  {
+    symbol: "BNB",
+    name: "Binance Coin",
+    logo: "https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png",
+    price: 584.21,
+    change: -0.87,
+  },
+  // {
+  //   symbol: "MON",
+  //   name: "Monad",
+  //   logo: "https://assets.coingecko.com/coins/images/35110/small/monad.png",
+  //   price: 0,
+  //   change: 0,
+  // },
+];

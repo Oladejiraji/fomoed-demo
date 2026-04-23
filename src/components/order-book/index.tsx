@@ -50,7 +50,7 @@ export function OrderbookTrades() {
   const [section, setSection] = useState<"order_book" | "trades">("order_book");
 
   return (
-    <div className="w-full h-full bg-[#262626] py-4 px-0 overflow-hidden">
+    <div className="w-full h-full bg-[#262626] pt-5 pb-4 px-0 overflow-hidden">
       <div className="flex flex-col gap-3 overflow-hidden w-full h-full">
         <div className="flex items-center rounded-[20px] bg-[#1D1D1D] overflow-hidden p-0.5 mx-5">
           <OrderbookSectionTitle

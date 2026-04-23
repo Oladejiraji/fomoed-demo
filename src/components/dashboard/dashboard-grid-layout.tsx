@@ -3,8 +3,10 @@ import React from "react";
 import { Responsive, useContainerWidth } from "react-grid-layout";
 import Screener from "../widgets/screener";
 import { PriceChart } from "../widgets/price-chart";
-import OrderBook from "../widgets/order-book";
 import Dominance from "../widgets/dominance";
+import { OrderbookTrades } from "../order-book";
+import { News } from "../widgets/news";
+import { DraggableWidget } from "../shared/draggable-widget";
 
 const layouts = {
   lg: [
@@ -48,26 +50,15 @@ export function DashboardGridLayout(props: IProps) {
           rowHeight={105}
           margin={[4, 4]}
           className="w-full h-full flex-1"
+          dragConfig={{
+            handle: ".app_drag_handle",
+          }}
         >
-          <div
-            className="rounded-2xl overflow-hidden shadow-[0px_0px_0px_1px_#FFFFFF0A_inset,0px_2px_0px_0px_#FFFFFF14_inset,0px_0px_0px_1px_#00000029,0px_1px_1px_-0.5px_#0000002E,0px_3px_3px_-1.5px_#0000002E,0px_6px_6px_-3px_#00000040,0px_12px_12px_-6px_#0000002E]"
-            key="1"
-          >
-            <PriceChart />
-          </div>
-          <div className="rounded-2xl overflow-hidden" key="2">
-            <Screener />
-          </div>
-          <div className="bg-zinc-500 rounded-2xl overflow-hidden" key="3">
-            <OrderBook />
-          </div>
-          <div
-            className="bg-zinc-600 rounded-2xl overflow-hidden"
-            key="4"
-          ></div>
-          <div className="bg-zinc-700 rounded-2xl overflow-hidden" key="5">
-            <Dominance />
-          </div>
+          <DraggableWidget key="1"><PriceChart /></DraggableWidget>
+          <DraggableWidget key="2"><Screener /></DraggableWidget>
+          <DraggableWidget key="3"><OrderbookTrades /></DraggableWidget>
+          <DraggableWidget key="4"><News /></DraggableWidget>
+          <DraggableWidget key="5"><Dominance /></DraggableWidget>
         </Responsive>
       )}
     </div>
