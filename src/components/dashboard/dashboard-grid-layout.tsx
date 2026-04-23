@@ -4,6 +4,7 @@ import { Responsive, useContainerWidth } from "react-grid-layout";
 import Screener from "../widgets/screener";
 import { PriceChart } from "../widgets/price-chart";
 import OrderBook from "../widgets/order-book";
+import Dominance from "../widgets/dominance";
 
 const layouts = {
   lg: [
@@ -64,10 +65,9 @@ export function DashboardGridLayout(props: IProps) {
             className="bg-zinc-600 rounded-2xl overflow-hidden"
             key="4"
           ></div>
-          <div
-            className="bg-zinc-700 rounded-2xl overflow-hidden"
-            key="5"
-          ></div>
+          <div className="bg-zinc-700 rounded-2xl overflow-hidden" key="5">
+            <Dominance />
+          </div>
         </Responsive>
       )}
     </div>
