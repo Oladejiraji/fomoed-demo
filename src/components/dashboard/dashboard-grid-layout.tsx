@@ -39,7 +39,7 @@ export function DashboardGridLayout(props: IProps) {
   return (
     <div
       ref={containerRef}
-      className="flex-1 w-full h-full flex overflow-y-auto scrollbar-minimal"
+      className="flex-1 w-full h-full flex overflow-y-auto scrollbar-minimal overflow-x-hidden"
     >
       {mounted && (
         <Responsive
@@ -54,11 +54,21 @@ export function DashboardGridLayout(props: IProps) {
             handle: ".app_drag_handle",
           }}
         >
-          <DraggableWidget key="1"><PriceChart /></DraggableWidget>
-          <DraggableWidget key="2"><Screener /></DraggableWidget>
-          <DraggableWidget key="3"><OrderbookTrades /></DraggableWidget>
-          <DraggableWidget key="4"><News /></DraggableWidget>
-          <DraggableWidget key="5"><Dominance /></DraggableWidget>
+          <DraggableWidget key="1">
+            <PriceChart />
+          </DraggableWidget>
+          <DraggableWidget key="2">
+            <Screener />
+          </DraggableWidget>
+          <DraggableWidget key="3">
+            <OrderbookTrades />
+          </DraggableWidget>
+          <DraggableWidget key="4">
+            <News />
+          </DraggableWidget>
+          <DraggableWidget key="5">
+            <Dominance />
+          </DraggableWidget>
         </Responsive>
       )}
     </div>

@@ -10,6 +10,7 @@ export function Sidebar() {
         <button
           type="button"
           className="cursor-pointer w-6 h-6 justify-center items-center flex"
+          style={{ filter: "blur(8px)" }}
         >
           <Fomoed />
         </button>
