@@ -55,20 +55,21 @@ const othersData = [
 type DominanceDatum = (typeof dominanceData)[number];
 
 function DominanceItem({ dom, index }: { dom: DominanceDatum; index: number }) {
-  const [flipped, setFlipped] = useState(false);
-  const [showDominance, setShowDominance] = useState(false);
+  const [autoFlipped, setAutoFlipped] = useState(false);
+  const [autoDone, setAutoDone] = useState(false);
+  const [hovering, setHovering] = useState(false);
 
   useEffect(() => {
-    const flipTimer = setTimeout(() => setFlipped(true), 2800 + index * 200);
-    const textTimer = setTimeout(
-      () => setShowDominance(true),
-      3100 + index * 200,
-    );
+    const flipDelay = 2800 + index * 200;
+    const flipTimer = setTimeout(() => setAutoFlipped(true), flipDelay);
+    const doneTimer = setTimeout(() => setAutoDone(true), flipDelay + 700);
     return () => {
       clearTimeout(flipTimer);
-      clearTimeout(textTimer);
+      clearTimeout(doneTimer);
     };
   }, [index]);
+
+  const coinFlipped = autoFlipped !== (autoDone && hovering);
 
   return (
     <motion.div
@@ -77,12 +78,17 @@ function DominanceItem({ dom, index }: { dom: DominanceDatum; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 1.2, ease: "easeOut" }}
     >
-      <div className="w-8 h-8" style={{ perspective: 600 }}>
+      <motion.div
+        className="w-8 h-8"
+        style={{ perspective: 600 }}
+        onHoverStart={() => setHovering(true)}
+        onHoverEnd={() => setHovering(false)}
+      >
         <motion.div
           className="relative w-full h-full"
           style={{ transformStyle: "preserve-3d" }}
-          animate={{ rotateY: flipped ? 180 : 0 }}
-          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+          animate={{ rotateY: coinFlipped ? 180 : 0 }}
+          transition={{ duration: autoDone ? 0.4 : 0.7, ease: [0.4, 0, 0.2, 1] }}
         >
           {Array.from({ length: 10 }).map((_, edgeIdx) => {
             const z = -2.5 + (5 / 9) * edgeIdx;
@@ -128,18 +134,18 @@ function DominanceItem({ dom, index }: { dom: DominanceDatum; index: number }) {
             />
           </div>
         </motion.div>
-      </div>
+      </motion.div>
       <div className="relative grid overflow-hidden h-8">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.p
-            key={showDominance ? "dominance" : "price"}
+            key={autoFlipped ? "dominance" : "price"}
             className="text-2xl font-medium leading-8 text-[#F9F9F9] [grid-area:1/1]"
             initial={{ y: "100%", opacity: 0 }}
             animate={{ y: "0%", opacity: 1 }}
             exit={{ y: "-100%", opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
           >
-            {showDominance ? `${dom.dominance}%` : `$${dom.price}`}
+            {autoFlipped ? `${dom.dominance}%` : `$${dom.price}`}
           </motion.p>
         </AnimatePresence>
       </div>
