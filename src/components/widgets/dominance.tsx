@@ -152,10 +152,10 @@ const Dominance = () => {
   return (
     <div
       className="bg-[#262626]  h-full w-full border border-[#262626] overflow-hidden rounded-[16px]"
-      style={{
-        boxShadow:
-          "0px 0px 0px 1px #FFFFFF0A inset, 0px 2px 0px 0px #FFFFFF14 inset, 0px 0px 0px 1px #00000029, 0px 1px 1px -0.5px #0000002E, 0px 3px 3px -1.5px #0000002E, 0px 6px 6px -3px #00000040, 0px 12px 12px -6px #0000002E",
-      }}
+      // style={{
+      //   boxShadow:
+      //     "0px 0px 0px 1px #FFFFFF0A inset, 0px 2px 0px 0px #FFFFFF14 inset, 0px 0px 0px 1px #00000029, 0px 1px 1px -0.5px #0000002E, 0px 3px 3px -1.5px #0000002E, 0px 6px 6px -3px #00000040, 0px 12px 12px -6px #0000002E",
+      // }}
     >
       <div className="flex items-center justify-between border-b border-[#222222] px-4 py-3 ">
         <h3 className="text-[#F9F9F9] text-xs font-medium px-3">Dominance</h3>
